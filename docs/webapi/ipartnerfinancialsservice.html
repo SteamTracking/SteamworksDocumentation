@@ -966,6 +966,13 @@ with a <i>normal</i> (ie. non-Financial permission) WebAPI key. <br />
 If the API is called for a date outside of the available range for an app, the response will be
 empty except for the <strong>app_min_date</strong> field. <br />
 <br />
+Data is refreshed at least once per day. Wishlisting data does not have the same "wait for
+settlement" behavior as financial data (credit card payments etc.), therefore it is unnecessary to
+query prior dates more than once after dates have closed. For example: <br />
+<br />
+- On June 1st, it would be good practice to query May 31st and June 1st data. <br />
+- On June 2nd, it would be good practice to query June 1st and June 2nd, but re-querying May 31st
+should not provide any new or changed data. <br />
 <br />
 <strong>Return values</strong><br />
 <table>

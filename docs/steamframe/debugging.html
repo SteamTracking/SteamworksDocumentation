@@ -84,11 +84,24 @@ settings.<br />
     alt="steamframe-xrdp.png"
     title="steamframe-xrdp.png"
 />
-<h2 class="bb_section"><a name="4"></a>SSH</h2>
+<h2 class="bb_section"><a name="4"></a>SSH and ADB</h2>
 After <a href="/doc/steamframe/setup">enabling Developer Mode</a>, you can <strong>ssh </strong>into
 the headset using the default user <strong>steamos</strong> and whatever password you had set under
 <strong>Developer Mode </strong>settings:<br />
 <div class="bb_code">ssh steamos@frame</div>
+<br />
+Alternatively, you can <strong>adb</strong> into the headset by plugging the headset directly into
+your PC with a USB cable. If you do not have <strong>adb</strong> already installed, you can install
+it as part of the
+<a
+    href="https://developer.android.com/tools/releases/platform-tools"
+    target="_blank"
+    rel="noreferrer"
+    >Android SDK Platform Tools</a
+>. Note that adb can also be used to
+<a href="/doc/steamframe/adb_lepton">connect to lepton instances</a>. Once it is installed, you can
+connect to your device with:<br />
+<div class="bb_code">adb shell</div>
 <br />
 Once connected to headset there are a variety of helpful commands for you to use:<br />
 <ul>
