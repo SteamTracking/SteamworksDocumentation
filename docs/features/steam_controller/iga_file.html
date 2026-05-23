@@ -284,7 +284,41 @@ normal gameplay like voting screens. Layers are declared in their own section, e
     "1" "parent_set_name" "InGame" "AnalogTrigger" { } "Button" { "Modal_Accept"
     "#Action_Modal_Accept" "Modal_Decline" "#Action_Modal_Decline" } } }
 </div>
-<h2 class="bb_section"><a name="10"></a>Localization</h2>
+<h2 class="bb_subsection"><a name="10"></a>Revisions</h2>
+By default, the official configuration will be loaded by players, but if the user makes edits and
+manually selects another configuration they will no longer be pointed at that official
+configuration. If you either make a change in APIs while adding Steam Input API, ex: removing XInput
+or make a breaking change to your Steam Input API configuration you will need to force players to
+update. This can be accomplished via revision flags. These can be added to the action block with the
+following format:<br />
+<div class="bb_code">
+    "In Game Actions" { "major_revision" "1" "minor_revision" "1" "major_revision_affects_xinput"
+    "0" "major_revision_affects_mousekb" "0" "actions" { ...
+</div>
+<br />
+And you will want to either re-export all official configurations or manually add the same
+major/minor revision tokens to the individual files in the same format:<br />
+<div class="bb_code">
+    "controller_mappings" { "version" "3" "revision" "3" "title" "Portal 2 Standard Controls For
+    XBOX ONE Controller" "description" "Your modified configuration for this game." ...
+    "controller_type" "controller_xboxone" "controller_caps" "1590271" "major_revision" "1"
+    "minor_revision" "1" "Timestamp" "1761699544" "actions" { ...
+</div>
+<br />
+Major revisions are used for large, breaking changes to Steam Input API, such as adding it to an
+existing game or changing of action sets. By default, this will only affect configurations already
+using Steam Input API as to not disrupt existing players who have been using Steam Input to existing
+gamepad support. If you're removing XInput or other gamepad APIs then you will want to set the
+"major_revision_affects_xinput" flag in order to update existing players. There is also the
+"major_revision_affects_mousekb" which will force players of mouse/kb configurations to update. If
+your game did not have any controller and there's players who are using Steam Input, it would be
+better practice to call
+<a href="/doc/api/isteaminput#GetDeviceBindingRevision" target="_blank" rel="noreferrer"
+    >GetDeviceBindingRevision</a
+>
+or look at the configuration loaded callback and prompt the user rather than force players who've
+constructed custom configurations to rebuild them in the new action set structure.
+<h2 class="bb_section"><a name="11"></a>Localization</h2>
 <br />
 The master IGA file should include a localization section alongside the action set definitions. The
 individual child objects of the localization object will be any one of the language strings that
@@ -304,7 +338,7 @@ To add additional languages, simply add more language blocks with localized text
 The token for each language should match the "API language code" value, ex: "schinese" for
 Simplified Chinese. The full list of supported languages can be found
 <a href="/doc/store/localization/languages" target="_blank" rel="noreferrer">here</a>.
-<h2 class="bb_section"><a name="11"></a>How Steam uses your IGA file</h2>
+<h2 class="bb_section"><a name="12"></a>How Steam uses your IGA file</h2>
 <br />
 The master IGA file you create will only ever be during development (but it should still be saved,
 maintained, and stored in your version control, etc). When you
