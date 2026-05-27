@@ -460,6 +460,7 @@
     "steamdeck/svg",
     "steamdeck/templates",
     "steamdeck/testing",
+    "steamdeck/virtual-conference",
     "steamdeck/virtualconference",
     "steamframe",
     "steamframe/adb_lepton",
