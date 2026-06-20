@@ -573,6 +573,7 @@
     "store/pricing/subscriptions",
     "store/pricing/subscriptions/steam_managed",
     "store/promo",
+    "store/promo/creatorpages",
     "store/promo/dailydeal",
     "store/promo/event_organizers",
     "store/promo/franchise_page",
