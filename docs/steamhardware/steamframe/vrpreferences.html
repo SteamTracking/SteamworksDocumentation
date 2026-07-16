@@ -1,0 +1,72 @@
+<h1>Suggesting default user settings for your game</h1>
+SteamVR offers a rich set of customizable settings to the user. To ensure that a game will run well
+out-of-the-box, a developer can suggest tailored default user settings for their game on Steam
+Frame, including the refresh rate or the display resolution that should be optimal for the
+experience. A user can further refine these settings in
+<strong>VR Settings -&gt; Video -&gt; Per-Application Video Settings</strong>. A user can also use
+<strong>Reset to Default</strong> to restore the default settings suggested for this game.<br />
+<br />
+The method for suggesting these default settings is identical regardless of which platform runtime
+(Proton, Lepton, native) or VR runtime (OpenVR, OpenXR) the application is built for. Developers can
+include a file named <strong>vrpreferences.json</strong> at the root of their game package and
+SteamVR will read this file and automatically create the corresponding per-application default
+values for relevant settings.<br />
+<br />
+The file must contain a dictionary named <strong>steam_frame</strong> and one or more of the
+following entries:<br />
+<br />
+<table>
+    <tbody>
+        <tr>
+            <th>Name</th>
+            <th>Value / Type</th>
+            <th>Corresponding Video -&gt; Per-Application Video Settings menu entry</th>
+            <th>Behavior when not specified</th>
+        </tr>
+        <tr>
+            <td>preferResolution</td>
+            <td>&lt;integer&gt;, width component</td>
+            <td>Resolution Per Eye</td>
+            <td>Use 1728x1728</td>
+        </tr>
+        <tr>
+            <td>preferMinRefreshRate</td>
+            <td>&lt;integer&gt;</td>
+            <td>Frame Limit / Refresh Rate Override</td>
+            <td>Use 72 Hz</td>
+        </tr>
+        <tr>
+            <td>preferHalfFramerate</td>
+            <td>true, false</td>
+            <td>Frame Limit / Throttling Behavior</td>
+            <td>No throttling</td>
+        </tr>
+        <tr>
+            <td>preferMotionSmoothingMode</td>
+            <td>"off", "on", "alwaysOn"</td>
+            <td>Motion Smoothing</td>
+            <td>Use global setting under Video -&gt; Motion Smoothing</td>
+        </tr>
+    </tbody>
+</table>
+<br />
+A developer can add, remove or change these suggested defaults though a game update, and as long as
+the user did not modify the settings through
+<strong>VR Settings -&gt; Video -&gt; Per-Application Video Settings</strong>, the updated defaults
+will be used. If a user has overridden a setting, their override will continue to be used until they
+use <strong>Reset to Default</strong>.<br />
+<br />
+Example <strong>vrpreferences.json</strong>:<br />
+<br />
+<div class="bb_code">
+    { "steam_frame": { "preferResolution": 2160, "preferMinRefreshRate": 90, "preferHalfFramerate":
+    true "preferMotionSmoothingMode": "off" } }
+</div>
+<br />
+This example file suggests:<br />
+<ul>
+    <li>A default resolution of 2160x2160<br /></li>
+    <li>A default display refresh rate of 90 Hz<br /></li>
+    <li>A default frame throttling to 1/2 (Frame Limit to 45 FPS)<br /></li>
+    <li>A default override to disable Motion Smoothing</li>
+</ul>

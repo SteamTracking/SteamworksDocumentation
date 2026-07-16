@@ -520,6 +520,7 @@
     "steamhardware/steamframe/engines/unreal",
     "steamhardware/steamframe/loadgames",
     "steamhardware/steamframe/setup",
+    "steamhardware/steamframe/vrpreferences",
     "steamhardware/steammachine",
     "store",
     "store/accolades",
