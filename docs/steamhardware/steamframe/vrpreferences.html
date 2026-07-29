@@ -10,7 +10,14 @@ The method for suggesting these default settings is identical regardless of whic
 (Proton, Lepton, native) or VR runtime (OpenVR, OpenXR) the application is built for. Developers can
 include a file named <strong>vrpreferences.json</strong> at the root of their game package and
 SteamVR will read this file and automatically create the corresponding per-application default
-values for relevant settings.<br />
+values for relevant settings.
+<div class="bb_callout">
+    <div>
+        The <strong>vrpreferences.json</strong> file is read when the application is being installed
+        or upon startup of SteamVR. During development, if the package is not fetched through Steam
+        for installation, it is necessary to restart SteamVR for the changes to take effect.
+    </div>
+</div>
 <br />
 The file must contain a dictionary named <strong>steam_frame</strong> and one or more of the
 following entries:<br />
@@ -49,6 +56,12 @@ following entries:<br />
         </tr>
     </tbody>
 </table>
+<div class="bb_callout bb_red">
+    <div>
+        JSON syntax can be prone to errors. In particular, make sure to not have a comma following
+        the last entry in the <strong>steam_frame</strong> dictionary.
+    </div>
+</div>
 <br />
 A developer can add, remove or change these suggested defaults though a game update, and as long as
 the user did not modify the settings through
@@ -58,7 +71,7 @@ use <strong>Reset to Default</strong>.<br />
 <br />
 Example <strong>vrpreferences.json</strong>:<br />
 <br />
-<div class="bb_code">
+<div class="bb_code json">
     { "steam_frame": { "preferResolution": 2160, "preferMinRefreshRate": 90, "preferHalfFramerate":
     true, "preferMotionSmoothingMode": "off" } }
 </div>
@@ -70,3 +83,26 @@ This example file suggests:<br />
     <li>A default frame throttling to 1/2 (Frame Limit to 45 FPS)<br /></li>
     <li>A default override to disable Motion Smoothing</li>
 </ul>
+<br />
+To validate that the <strong>vrpreferences.json</strong> is picked up by SteamVR, the
+<strong>vrserver.txt</strong> log file can be searched:<br />
+<br />
+<div class="bb_code plain">
+    [Info] - [Settings] Loading app-provided preferences from
+    '/home/steamos/.local/share/Steam/steamapps/common/&lt;game folder&gt;/vrpreferences.json'
+</div>
+<br />
+Parsing errors will be reported in this log, for example:<br />
+<br />
+<div class="bb_code plain">
+    [Info] - Parsing of JSON file
+    "/home/steamos/.local/share/Steam/steamapps/common/[...]/vrpreferences.json" failed: * Line 5,
+    Column 3 4: "preferMinRefreshRate": 120, 5: } 6: } Missing '}' or object member name Tue Jul 28
+    2026 11:05:56.126069 [Info] - [Settings] No or invalid application preferences settings at
+    '/home/steamos/.local/share/Steam/steamapps/common/[...]/vrpreferences.json'
+</div>
+<br />
+To fully validate that all preferences are being picked up, use
+<strong>VR Settings -&gt; Video -&gt; Per-Application Video Settings</strong>, press
+<strong>Reset to Default</strong> and check the defaulted settings against the specified
+preferences.
