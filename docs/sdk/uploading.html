@@ -758,21 +758,35 @@ image.
 See <a href="/doc/sdk/goldmaster">Customizing a gold master</a> for more details on customizing your
 retail install disk.
 <h2 class="bb_section"><a name="Preloading"></a>Preloading Games before Release</h2>
-By default, all content is always encrypted, on all retail discs and on all content servers.
-Switching a game to preload mode means owners can download the content, but it stays encrypted on
-the users' disk and can't be played. Once the game becomes officially released, Steam will decrypt
-the preloaded content and the user can play the game.<br />
+Preloading is a feature that is available for pre-release titles with pre-purchases and select free
+to play titles. A game that is in preload mode is available for customers to download, but the
+content is encrypted on the users’ disk and cannot be played until the game is released. Once the
+game becomes officially released, Steam will decrypt the preloaded content and the user can play the
+game after the decryption process.<br />
 <br />
-Switching a game to preload mode is recommended in these cases:<br />
+Enabling a preload is recommended in these cases:<br />
 <ul>
-    <li>
-        Shipping retail discs with product keys before the game is actually available (0-day
-        piracy).<br />
-    </li>
-    <li>Games that run a pre-purchase and are larger than 20GBs in size.</li>
+    <li>Games with large file sizes<br /></li>
+    <li>Extremely anticipated games</li>
 </ul>
 <br />
-Please submit a ticket to Steam Publishing if you believe your game requires preloading.
+Before enabling the preload, ensure that your most up to date build has been uploaded to Steam. You
+<i>can</i> update your game's build normally during a preload if necessary. Preload updates are
+delivered as a delta patch from the previous build in the same way they are after release. Unlike
+post-release updates, preload updates are encrypted and are not immediately applied; they are stored
+on the player's system until the release. This means that multiple large updates can end up
+consuming a large amount of space on-disk. Please be thoughtful with the frequency and size of your
+updates during a preload.<br />
+<br />
+Preloads are self-service for titles in prepurchase. If you are a F2P game or believe your game
+should be eligible for preloading, please submit a ticket to
+<a
+    href="https://help.steampowered.com/en/wizard/HelpWithPublishing"
+    target="_blank"
+    rel="noreferrer"
+    >Steam Publishing</a
+>
+with details about your situation.
 <h2 class="bb_section"><a name="Building_DLC"></a>Building DLC</h2>
 DLC is built as a depot of the base game. See the
 <a href="/doc/store/application/dlc">Downloadable Content (DLC)</a> documentation for more
