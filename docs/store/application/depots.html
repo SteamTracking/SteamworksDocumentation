@@ -75,4 +75,26 @@ install directory on the <strong>General</strong> section under the
     src="https://shared.steamstatic.com/community_assets/images/steamworks_docs/english/set_install_dir.png"
     alt="set_install_dir.png"
     title="set_install_dir.png"
+/>
+<h2 class="bb_section"><a name="os_depots"></a>Operating System Depots</h2>
+If your app supports multiple platforms, you should use separate depots to store the platform
+specific content. For example, if your app natively supports Windows and Linux, have any
+Windows-specific files in a depot that is marked just for Windows as a depot. Likewise, have any
+Linux-specific files in a depot that is marked just for Linux. You can then have any common set of
+files in a depot marked for both Windows and Linux, or All Oses if you like.<br />
+<br />
+If you see a warning on your app landing page about an Operating System Depot missing from a
+package, that means you have an OS selected in the store data, and the package is missing at least
+one depot that can be mounted for that OS. Any users that own that package will not be able to
+download content for that OS. When this warning appears on your app landing page, you should
+probably correct it:<br />
+<br />
+<img
+    src="https://shared.steamstatic.com/community_assets/images/steamworks_docs/english/depot_os_warning.png"
+    alt="depot_os_warning.png"
+    title="depot_os_warning.png"
 /><br />
+<br />
+Shared depots, DLCs, or depots that contain the word "Debug" or "Internal" in their name will be
+excluded from this check. Most packages are checked, though any package with "For Beta Testing" or
+"Developer Comp" are excluded.
