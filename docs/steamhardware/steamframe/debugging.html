@@ -29,16 +29,37 @@ hand corner of the Dashboard, then the Performance button, and at the bottom ena
     title="steamframe-perfgraph.png"
 /><br />
 <br />
-<strong>Green </strong>means your game is making framerate. The top numbers show the game's gpu work
-for a single frame converted to fps (frames per second) and the texture resolution being submitted
-per eye. If your game is running particularly fast, it will switch to displaying milliseconds
-instead. The bottom row is how much time SteamVR's compositor is using per-vsync, the current gpu
-clock rate (in MHz) and average power draw over the past two seconds.<br />
-The bottom row is graded to show seconds.<br />
-<strong>Yellow </strong>means your game is running at half rate (each submitted frame is taking
+The overlay is made of 2 parts: a colored history graph representing game frame times and some raw
+numbers.<br />
+<br />
+The samples on the graph are colored as follows:<br />
+<br />
+<strong>Green</strong> indicates frame times within budget. In other words, they mean that your game
+is making framerate.<br />
+<strong>Yellow</strong> means your game is running at half rate (each submitted frame is taking
 between 1 and 2 vsync intervals to finish).<br />
-<strong>Red </strong>means your game is taking more than 2 vsync intervals to finish each frame.<br />
-<strong>Pink</strong> means SteamVR's compositor gpu preemption failed for some reason.
+<strong>Red</strong> means your game is taking more than 2 vsync intervals to finish each frame.<br />
+<strong>Pink</strong> means SteamVR's compositor GPU preemption failed for some reason.<br />
+<br />
+The bottom row is drawn with a gradient color to show passage of time, with the gradient cycling
+every second.<br />
+<br />
+The numbers give additional information on frame times, how the game is submitting frames, and
+information on power usage.<br />
+<br />
+<strong>First line</strong>: "G:" is average and peak GPU frame time, "C:" is average and peak CPU
+frame time, "[xx]" is the target game loop framerate (which might be the display refresh rate, or an
+integer divisor of it when the game is not making framerate), "aaaaxbbbb" is the resolution of the
+per-eye images submitted by the game. Note that the average frame times are expressed in frames per
+second, unless the game renders fast enough and the display switches to reporting the value in
+milliseconds.<br />
+<strong>Second line</strong>: the first number is how much time SteamVR's compositor is using per
+frame in milliseconds, the "@" second number is the current frequency of the GPU in MHz, the "xxW"
+third number is the average power draw over the past two seconds in Watts.<br />
+<strong>Third line</strong> (may be on the first line in older versions): "Dxx" indicates the format
+of depth textures submitted by the game when applicable, "Mxx" indicates the format of motion
+vectors textures submitted by the game when applicable, "skip" indicates the number of frame
+discontinuity detected in app poses (these events will skip motion smoothing for one frame).
 <h2 class="bb_section"><a name="GameTextures"></a>Depth and Motion Vectors</h2>
 To validate depth and motion vectors submitted by your game, navigate to
 <strong>VR Settings &gt; Developer</strong> and select from the
