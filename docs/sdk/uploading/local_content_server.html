@@ -13,7 +13,13 @@ The LCS only serves depot content and doesn't override any other game configurat
 is always encrypted on your LCS (as it is for public content servers). Even if somebody managed to
 download depot chunks from your LCS, they wouldn't be able to decrypt the data, since they don't
 have the depot decryption keys.
-<h2 class="bb_section"><a name="2"></a>Setting Up Local Content Server</h2>
+<h2 class="bb_section"><a name="2"></a>Local-only branch</h2>
+<br />
+You'll need a branch for your app named "local". Prior to September 2026, this branch was created
+automatically by Steam on the first build uploaded which specified it was an LCS build. From
+September 2026 onwards, Steam will require you to create this branch manually first (if it doesn't
+already exist for your app), and will require it to be password-protected.
+<h2 class="bb_section"><a name="3"></a>Setting Up Local Content Server</h2>
 First choose a simple, but high performance web server that only needs to serve static files. We are
 using the open source web server
 <a href="https://github.com/cesanta/mongoose" target="_blank" rel="noreferrer">mongoose</a>, since
@@ -44,7 +50,7 @@ desired local build, then click 'Preview Change'.<br />
     title="setLCSLive.png"
 />
 <h2 class="bb_section">
-    <a name="3"></a>Configuring Steam Client To Use Your Local Content Server
+    <a name="4"></a>Configuring Steam Client To Use Your Local Content Server
 </h2>
 For the Steam client to know where to look for your game, you'll need to create a file,
 <code class="bb_code bb_code_inline nohighlight">steam_dev.cfg</code> in the same directory that
@@ -78,3 +84,18 @@ Note: The default location of the Steam executable is:<br />
         <div class="bb_code">~/.local/share/Steam/</div>
     </li>
 </ul>
+<br />
+<strong>Note</strong> As of September 2026, Steam will begin requiring newly-created "local" app
+branches to be <strong>password-protected</strong>. For local branches with a password, users will
+also need to enter the password into the Steam client UI to unlock the "local" branch selection.
+They can do this as shown below. For best results, the user should have the @LocalContentServer
+setting placed in their steam_dev.cfg <strong>before</strong> unlocking the beta.<br />
+<br />
+<ul>
+    <li>right-clicking the game in the Steam Library<br /></li>
+    <li>choosing "Properties"<br /></li>
+    <li>selecting "Game Versions &amp; Betas"<br /></li>
+    <li>entering the password in the "Private Versions" text box and hitting "Check Code"<br /></li>
+    <li>selecting the newly-appearing "local" entry under "Selected Game Version" above</li>
+</ul>
+<br />
