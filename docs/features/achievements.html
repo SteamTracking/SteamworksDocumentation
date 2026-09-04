@@ -144,17 +144,6 @@ The following is the list of achievements from the
         <a href="/doc/api/ISteamUserStats">ISteamUserStats</a>.<br />
     </li>
     <li>
-        At the start of a game session, call
-        <a href="/doc/api/ISteamUserStats#RequestCurrentStats"
-            >ISteamUserStats::RequestCurrentStats</a
-        >
-        to fetch the user's stats and achievement data from the Steam back end. You will receive a
-        <a href="/doc/api/ISteamUserStats#UserStatsReceived_t"
-            >ISteamUserStats::UserStatsReceived_t</a
-        >
-        callback when the data is ready.<br />
-    </li>
-    <li>
         Use <a href="/doc/api/ISteamUserStats#GetStat">ISteamUserStats::GetStat</a> and
         <a href="/doc/api/ISteamUserStats#GetAchievement">ISteamUserStats::GetAchievement</a> to
         iterate the data and initialize game state.<br />
