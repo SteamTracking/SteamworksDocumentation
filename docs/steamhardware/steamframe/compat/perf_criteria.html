@@ -193,11 +193,12 @@ required display refresh rate and includes the required headroom for SteamVR. A 
 used to provide a certain amount of forgiveness to the application: a single frame time above the
 threshold will not cause a failure, the filter looks for repeated excursions above the threshold. To
 help troubleshoot transient frame time issues with your game, you can look at the
-<strong>perfcriteria.txt</strong> file in the SteamVR logs folder. The first 2 lines recapitulate
-the Application Name, Steam Application ID, target frame time, effective resolution, etc. The rest
-of the file is a list of frame times leading to the violation of the threshold set with the target
-frame time. This data is helpful to pick up rapid frame time oscillations that may not be visible on
-the overlay.<br />
+<strong>perfcriteria.txt</strong> file in the SteamVR logs folder
+(<strong>/home/steamos/.local/share/Steam/logs</strong>, or accessible through the alias
+<strong>cdl</strong> from a shell). The first 2 lines recapitulate the Application Name, Steam
+Application ID, target frame time, effective resolution, etc. The rest of the file is a list of
+frame times leading to the violation of the threshold set with the target frame time. This data is
+helpful to pick up rapid frame time oscillations that may not be visible on the overlay.<br />
 <br />
 An <strong>additional warning</strong> is displayed if the game is using a resolution greater than
 the recommended resolution. If the game uses dynamic resolution, this condition uses the maximum

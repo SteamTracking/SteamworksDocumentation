@@ -19,14 +19,14 @@ see <strong>Connect</strong>. The first time you launch Steam Link on PC it will
 screen. Use <strong>alt+enter</strong> to switch to windowed mode. It will remember this setting on
 future launches.
 <h2 class="bb_section"><a name="PerformanceGraph"></a>Performance Graph</h2>
-You can turn on the in-headset performance graph by clicking the Clock button in the lower right
-hand corner of the Dashboard, then the Performance button, and at the bottom enable
-<strong>Show Perf Overlay In VR</strong><br />
+You can turn on the in-headset performance graph from the Quick Access Menu: click the Clock button
+in the lower right hand corner of the Dashboard, then the Performance button, scroll down to VR
+Settings and toggle <strong>Show Perf Overlay In VR</strong>.<br />
 <br />
 <img
-    src="https://shared.steamstatic.com/community_assets/images/steamworks_docs/english/steamframe-perfgraph.png"
-    alt="steamframe-perfgraph.png"
-    title="steamframe-perfgraph.png"
+    src="https://shared.steamstatic.com/community_assets/images/steamworks_docs/english/steamframe-perfgraph2.png"
+    alt="steamframe-perfgraph2.png"
+    title="steamframe-perfgraph2.png"
 /><br />
 <br />
 The overlay is made of 2 parts: a colored history graph representing game frame times and some raw
@@ -34,12 +34,21 @@ numbers.<br />
 <br />
 The samples on the graph are colored as follows:<br />
 <br />
-<strong>Green</strong> indicates frame times within budget. In other words, they mean that your game
-is making framerate.<br />
-<strong>Yellow</strong> means your game is running at half rate (each submitted frame is taking
-between 1 and 2 vsync intervals to finish).<br />
-<strong>Red</strong> means your game is taking more than 2 vsync intervals to finish each frame.<br />
-<strong>Pink</strong> means SteamVR's compositor GPU preemption failed for some reason.<br />
+<ul>
+    <li>
+        <strong>Green</strong> indicates frame times within budget. In other words, they mean that
+        your game is making framerate.<br />
+    </li>
+    <li>
+        <strong>Yellow</strong> means your game is running at half rate (each submitted frame is
+        taking between 1 and 2 vsync intervals to finish).<br />
+    </li>
+    <li>
+        <strong>Red</strong> means your game is taking more than 2 vsync intervals to finish each
+        frame.<br />
+    </li>
+    <li><strong>Pink</strong> means SteamVR's compositor GPU preemption failed for some reason.</li>
+</ul>
 <br />
 The bottom row is drawn with a gradient color to show passage of time, with the gradient cycling
 every second.<br />
@@ -60,6 +69,90 @@ third number is the average power draw over the past two seconds in Watts.<br />
 of depth textures submitted by the game when applicable, "Mxx" indicates the format of motion
 vectors textures submitted by the game when applicable, "skip" indicates the number of frame
 discontinuity detected in app poses (these events will skip motion smoothing for one frame).
+<h2 class="bb_section"><a name="PerformanceRecording"></a>Performance Recording</h2>
+Some of the key metrics from the <strong>Performance Graph</strong> can be saved to a file. This
+feature can be toggled from the Quick Access Menu: click the Clock button in the lower right hand
+corner of the Dashboard, then the Performance button, scroll down to VR Settings and toggle
+<strong>Record VR Performance</strong>.<br />
+<br />
+<img
+    src="https://shared.steamstatic.com/community_assets/images/steamworks_docs/english/steamframe-perfrecording.png"
+    alt="steamframe-perfrecording.png"
+    title="steamframe-perfrecording.png"
+/><br />
+<br />
+The recording is only active when a VR application is running locally. Files are stored in the
+SteamVR Logs folder (<strong>/home/steamos/.local/share/Steam/logs</strong>, or accessible through
+the alias <strong>cdl</strong> from a shell) with a prefix <strong>perfrecording-</strong> followed
+by the Steam application ID and the date/time the recording was initiated (for example:
+<strong>perfrecording-steam.app.445960-2026-09-04_15-16-43.csv</strong>). The files are formatted as
+Comma Separated Values (CSV), with the following metrics available on a periodic interval
+(sample):<br />
+<br />
+<ul>
+    <li>
+        <strong>dashboard</strong>: Whether the SteamVR dashboard was visible at any point during
+        the period since the last sample.<br />
+    </li>
+    <li>
+        <strong>fps</strong>: The framerate, corresponding to the actual number of frames submitted
+        by the application.<br />
+    </li>
+    <li>
+        <strong>peakCpu(ms)</strong> and <strong>peakGpu(ms)</strong>: The peak CPU and GPU frame
+        times, in milliseconds, corresponding to the maximum time the application took to submit a
+        frame.<br />
+    </li>
+    <li>
+        <strong>reprojected</strong>: The number of frames reprojected by the SteamVR Compositor.
+        These events occur when the application frame times are too high, or the application is
+        being throttled (for example via SteamVR Settings for the application or when using SteamVR
+        Motion Smoothing).<br />
+    </li>
+    <li><strong>peakGpu(MHz)</strong>: The peak GPU clock, in Megahertz.<br /></li>
+    <li><strong>peakPower(W)</strong>: The peak total system power, in Watts.<br /></li>
+    <li>
+        <strong>refresh(Hz)</strong>: The headset's refresh rate (as set by the user in the SteamVR
+        Settings for the application).<br />
+    </li>
+    <li>
+        <strong>throttle</strong>: The frame limit, either set by the user through SteamVR Settings
+        for the application, or by SteamVR when Motion Smoothing is active.<br />
+    </li>
+    <li>
+        <strong>width</strong> and <strong>height</strong>: The minimum resolution of any frame
+        submitted by the application during the period since the last sample.
+    </li>
+</ul>
+<br />
+The top part of the CSV file also contains a summary:<br />
+<br />
+<ul>
+    <li>
+        <strong>appId</strong> and <strong>appName</strong>: The Steam application ID and
+        application name.<br />
+    </li>
+    <li>
+        <strong>totalFrames</strong>: The total number of frames submitted by the application during
+        the recording.<br />
+    </li>
+    <li>
+        <strong>reprojectedFrames</strong>: The total number of frames reprojected by the SteamVR
+        Compositor during the recording.<br />
+    </li>
+    <li>
+        <strong>framesWithDepth</strong>: The number of frames submitted by the application that
+        included a Depth Buffer.<br />
+    </li>
+    <li>
+        <strong>framesWithMotionVectors</strong>: The number of frames submitted by the application
+        that included a Motion Vectors Buffer.<br />
+    </li>
+    <li>
+        <strong>minResolution</strong> and <strong>maxResolution</strong>: The absolute minimum and
+        maximum resolutions observed during the recording.
+    </li>
+</ul>
 <h2 class="bb_section"><a name="GameTextures"></a>Depth and Motion Vectors</h2>
 To validate depth and motion vectors submitted by your game, navigate to
 <strong>VR Settings &gt; Developer</strong> and select from the
