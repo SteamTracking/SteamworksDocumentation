@@ -746,6 +746,53 @@ Deprecated.
 </table>
 <br />
 Deprecated.
+<h2 class="bb_subsection"><a name="SetGamePerformanceSetting"></a>SetGamePerformanceSetting</h2>
+<div class="bb_code cpp">void SetGamePerformanceSetting();</div>
+<table>
+    <tbody>
+        <tr>
+            <th>Name</th>
+            <th>Type</th>
+            <th>Description</th>
+        </tr>
+        <tr>
+            <td><strong>setting</strong></td>
+            <td>
+                <a href="/doc/api/ISteamApps#EGamePerformanceSetting">EGamePerformanceSetting</a>
+            </td>
+            <td>The relative performance level.</td>
+        </tr>
+    </tbody>
+</table>
+<br />
+Allows the game to report to Steam servers what the relative performance settings are set to for the
+current user. This data will be included with anonymous framerate data if the user has opted into
+sharing of those data.
+<h2 class="bb_subsection"><a name="SetGameRenderResolution"></a>SetGameRenderResolution</h2>
+<div class="bb_code cpp">void SetGameRenderResolution();</div>
+<table>
+    <tbody>
+        <tr>
+            <th>Name</th>
+            <th>Type</th>
+            <th>Description</th>
+        </tr>
+        <tr>
+            <td><strong>unWidth</strong></td>
+            <td>uint32</td>
+            <td>Pixel width</td>
+        </tr>
+        <tr>
+            <td><strong>unHeight</strong></td>
+            <td>uint32</td>
+            <td>Pixel height</td>
+        </tr>
+    </tbody>
+</table>
+<br />
+Allows the game to report to Steam servers what the render resolution settings are set to for the
+current user. This data will be included with anonymous framerate data if the user has opted into
+sharing of those data.
 <h2 class="bb_subsection"><a name="UninstallDLC"></a>UninstallDLC</h2>
 <div class="bb_code cpp">void UninstallDLC( AppId_t nAppID );</div>
 <table>
@@ -954,6 +1001,48 @@ Sent every minute when a appID is owned via a timed trial.<br />
 <strong>See Also:</strong> <a href="/doc/api/ISteamApps#BIsTimedTrial">ISteamApps::BIsTimedTrial</a>
 <h2 class="bb_section"><a name="enums"></a>Enums</h2>
 These are enums which are defined for use with ISteamApps.
+<h2 class="bb_subsection"><a name="EGamePerformanceSetting"></a>EGamePerformanceSetting</h2>
+Game performance levels.<br />
+<br />
+<table>
+    <tbody>
+        <tr>
+            <th>Name</th>
+            <th>Value</th>
+            <th>Description</th>
+        </tr>
+        <tr id="k_EGamePerformanceSetting_NotSet">
+            <td><strong>k_EGamePerformanceSetting_NotSet</strong></td>
+            <td>0</td>
+            <td></td>
+        </tr>
+        <tr id="k_EGamePerformanceSetting_Low">
+            <td><strong>k_EGamePerformanceSetting_Low</strong></td>
+            <td>1</td>
+            <td></td>
+        </tr>
+        <tr id="k_EGamePerformanceSetting_Medium">
+            <td><strong>k_EGamePerformanceSetting_Medium</strong></td>
+            <td>2</td>
+            <td></td>
+        </tr>
+        <tr id="k_EGamePerformanceSetting_High">
+            <td><strong>k_EGamePerformanceSetting_High</strong></td>
+            <td>3</td>
+            <td></td>
+        </tr>
+        <tr id="k_EGamePerformanceSetting_Ultra">
+            <td><strong>k_EGamePerformanceSetting_Ultra</strong></td>
+            <td>4</td>
+            <td></td>
+        </tr>
+        <tr id="k_EGamePerformanceSetting_Custom">
+            <td><strong>k_EGamePerformanceSetting_Custom</strong></td>
+            <td>4</td>
+            <td></td>
+        </tr>
+    </tbody>
+</table>
 <h2 class="bb_subsection">
     <a name="ERegisterActivationCodeResult"></a>ERegisterActivationCodeResult
 </h2>

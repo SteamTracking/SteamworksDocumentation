@@ -414,6 +414,83 @@ Returns the number of seconds since the user last moved the mouse.<br />
 Returns the Steam server time in Unix epoch format. (Number of seconds since Jan 1, 1970 UTC)<br />
 <br />
 <strong>Returns:</strong> <a href="/doc/api/steam_api#uint32">uint32</a>
+<h2 class="bb_subsection">
+    <a name="GetSteamHardwareDefaultConfig"></a>GetSteamHardwareDefaultConfig
+</h2>
+<div class="bb_code cpp">ESteamDefaultHardwareConfig GetSteamHardwareDefaultConfig();</div>
+<br />
+Use this method to help choose default game settings (video and other) that you have tuned for
+specific Steam hardware. It also enables changing your default game settings on future Steam
+hardware without needing to recompile your game.<br />
+<br />
+This method returns an
+<a href="/doc/api/ISteamUtils#ESteamHardwareDefaultConfig"
+    >ISteamUtils::ESteamHardwareDefaultConfig</a
+>, which has two categories of values:<br />
+<ul>
+    <li>
+        Machine specific values: Map each of these values to a setting configuration tuned for that
+        device.<br />
+    </li>
+    <li>
+        General values (low, medium, high, max): Map these values to one of your game's user
+        selectable setting presets. If your game has less than 4 presets, it is expected that
+        multiple values might map to the same preset. For example, a game with 3 presets might map
+        high and max to the game's 'high' user preset. For games that only have 1 preset and run
+        great on any device, low, medium, high and max might all be mapped to that single preset.
+    </li>
+</ul>
+<br />
+By default, this method will return a value corresponding to the device type returned by
+<a href="/doc/api/ISteamUtils#IsRunningOnSteamHardware">ISteamUtils::IsRunningOnSteamHardware</a>,
+such<br />
+as returning
+<code class="bb_code bb_code_inline nohighlight">k_ESteamHardwareDefaultConfigSteamDeck</code> when
+running on a Steam Deck. It may also return a configuration value for 3rd party<br />
+hardware that has similar performance characteristics to Steam hardware, such as returning
+<code class="bb_code bb_code_inline nohighlight">k_ESteamHardwareDefaultConfigSteamDeck</code>
+when<br />
+running on 3rd part handheld gaming devices running SteamOS.<br />
+<br />
+You can also change what value the Steam Client returns per device through the Steamworks Partner
+Site. This allows you to customize the<br />
+default configuration used on future Steam hardware without recompiling your game. For example, if
+your game runs well on Steam Machine<br />
+using your 'high' user preset, but was released before that device became available, you could
+configure this method to return<br />
+<code class="bb_code bb_code_inline nohighlight">k_ESteamHardwareDefaultConfigHigh</code> when run
+on those devices. Similarly if your game was released before Steam Frame, you could configure<br />
+this method to return
+<code class="bb_code bb_code_inline nohighlight">k_ESteamHardwareDefaultConfigSteamDeck</code> so
+that when your game is run in 2d mode, it uses your tuned Steam Deck<br />
+presets.<br />
+<br />
+A common approach to choosing default settings would be:<br />
+<ul>
+    <li>
+        Call
+        <a href="/doc/api/ISteamUtils#GetSteamHardwareDefaultConfig"
+            >ISteamUtils::GetSteamHardwareDefaultConfig</a
+        >
+        to get an
+        <a href="/doc/api/ISteamUtils#ESteamHardwareDefaultConfig"
+            >ISteamUtils::ESteamHardwareDefaultConfig</a
+        >
+        value.<br />
+        <ul>
+            <li>
+                If the returned value is for hardware that you have a known configuration for, use a
+                tuned matching configuration.<br />
+            </li>
+            <li>
+                If the returned value is low, medium, high or max, use a matching user preset.<br />
+            </li>
+            <li>
+                If the returned value had no match, fall back to your default setting heuristics.
+            </li>
+        </ul>
+    </li>
+</ul>
 <h2 class="bb_subsection"><a name="GetSteamUILanguage"></a>GetSteamUILanguage</h2>
 <div class="bb_code cpp">const char * GetSteamUILanguage();</div>
 Returns the language the steam client is running in.<br />
@@ -426,7 +503,6 @@ For a full list of languages see
 <a href="/doc/store/localization/languages">Supported Languages</a>.<br />
 <br />
 <strong>Returns:</strong> const char *<br />
-<br />
 <br />
 <strong>See Also:</strong>
 <a href="/doc/api/ISteamApps#GetCurrentGameLanguage">ISteamApps::GetCurrentGameLanguage</a>,
@@ -554,6 +630,20 @@ Returns the number of characters (not bytes) filtered.<br />
 <br />
 <strong>See Also:</strong>
 <a href="/doc/api/ISteamUtils#InitFilterText">ISteamUtils::InitFilterText</a>
+<h2 class="bb_subsection"><a name="IsRunningOnSteamHardware"></a>IsRunningOnSteamHardware</h2>
+<div class="bb_code cpp">ESteamHardwareType IsRunningOnSteamHardware();</div>
+Returns an
+<a href="/doc/api/ISteamUtils#ESteamHardwareType">ISteamUtils::ESteamHardwareType</a> value
+indicating whether the current game is running on Steam hardware and, if so, which hardware.<br />
+<br />
+<strong>Returns:</strong>
+<a href="/doc/api/ISteamUtils#ESteamHardwareType">ISteamUtils::ESteamHardwareType</a>
+<h2 class="bb_subsection"><a name="IsRunningUnderProton"></a>IsRunningUnderProton</h2>
+<div class="bb_code cpp">bool IsRunningUnderProton();</div>
+<br />
+<strong>Returns:</strong> bool<br />
+Returns <strong>true</strong> if the current app is running under the Proton compatibility layer and
+<strong>false</strong> otherwise.
 <h2 class="bb_subsection"><a name="IsSteamInBigPictureMode"></a>IsSteamInBigPictureMode</h2>
 <div class="bb_code cpp">bool IsSteamInBigPictureMode();</div>
 Checks if Steam &amp; the Steam Overlay are running in Big Picture mode.<br />
@@ -587,7 +677,7 @@ Checks if the HMD view is being streamed via Steam Remote Play.<br />
 >
 <h2 class="bb_subsection"><a name="IsSteamRunningOnSteamDeck"></a>IsSteamRunningOnSteamDeck</h2>
 <div class="bb_code cpp">bool IsSteamRunningOnSteamDeck();</div>
-Checks if Steam is running on a Steam Deck, or any other SteamOS device.<br />
+Deprecated as of Steamworks SDK 1.65.<br />
 <br />
 <strong>Returns:</strong> bool<br />
 <strong>true</strong> if Steam itself is running on a Steam Deck device; otherwise,
@@ -1179,6 +1269,95 @@ Steam API call failure results returned by
                 <a href="/doc/api/ISteamUtils#GetAPICallResult">GetAPICallResult</a> was called with
                 the wrong callback type for this API call.
             </td>
+        </tr>
+    </tbody>
+</table>
+<h2 class="bb_subsection"><a name="ESteamHardwareDefaultConfig"></a>ESteamHardwareDefaultConfig</h2>
+Steam API call failure results returned by
+<a href="/doc/api/ISteamUtils#GetSteamHardwareDefaultConfig"
+    >ISteamUtils::GetSteamHardwareDefaultConfig</a
+>.<br />
+<br />
+<table>
+    <tbody>
+        <tr>
+            <th>Name</th>
+            <th>Value</th>
+            <th>Description</th>
+        </tr>
+        <tr id="k_ESteamHardwareDefaultConfigNone">
+            <td><strong>k_ESteamHardwareDefaultConfigNone</strong></td>
+            <td>0</td>
+            <td>No default configuration set.</td>
+        </tr>
+        <tr id="k_ESteamHardwareDefaultConfigLow">
+            <td><strong>k_ESteamHardwareDefaultConfigLow</strong></td>
+            <td>1</td>
+            <td>Low default configuration.</td>
+        </tr>
+        <tr id="k_ESteamHardwareDefaultConfigMedium">
+            <td><strong>k_ESteamHardwareDefaultConfigMedium</strong></td>
+            <td>2</td>
+            <td>Medium default configuration.</td>
+        </tr>
+        <tr id="k_ESteamHardwareDefaultConfigHigh">
+            <td><strong>k_ESteamHardwareDefaultConfigHigh</strong></td>
+            <td>3</td>
+            <td>High default configuration.</td>
+        </tr>
+        <tr id="k_ESteamHardwareDefaultConfigMax">
+            <td><strong>k_ESteamHardwareDefaultConfigMax</strong></td>
+            <td>4</td>
+            <td>Max default configuration.</td>
+        </tr>
+        <tr id="k_ESteamHardwareDefaultConfigSteamDeck">
+            <td><strong>k_ESteamHardwareDefaultConfigSteamDeck</strong></td>
+            <td>5</td>
+            <td>Steam Deck default configuration.</td>
+        </tr>
+        <tr id="k_ESteamHardwareDefaultConfigSteamMachine">
+            <td><strong>k_ESteamHardwareDefaultConfigSteamMachine</strong></td>
+            <td>6</td>
+            <td>Steam Machine default configuration.</td>
+        </tr>
+        <tr id="k_ESteamHardwareDefaultConfigSteamFrame">
+            <td><strong>k_ESteamHardwareDefaultConfigSteamFrame</strong></td>
+            <td>7</td>
+            <td>Steam Frame default configuration.</td>
+        </tr>
+    </tbody>
+</table>
+<h2 class="bb_subsection"><a name="ESteamHardwareType"></a>ESteamHardwareType</h2>
+Steam API call failure results returned by
+<a href="/doc/api/ISteamUtils#IsRunningOnSteamHardware">ISteamUtils::IsRunningOnSteamHardware</a
+>.<br />
+<br />
+<table>
+    <tbody>
+        <tr>
+            <th>Name</th>
+            <th>Value</th>
+            <th>Description</th>
+        </tr>
+        <tr id="k_ESteamHardwareTypeNone">
+            <td><strong>k_ESteamHardwareTypeNone</strong></td>
+            <td>0</td>
+            <td>Not playing on Steam hardware device.</td>
+        </tr>
+        <tr id="k_ESteamHardwareTypeSteamDeck">
+            <td><strong>k_ESteamHardwareTypeSteamDeck</strong></td>
+            <td>1</td>
+            <td>Running on a Steam Deck.</td>
+        </tr>
+        <tr id="k_ESteamHardwareTypeSteamMachine">
+            <td><strong>k_ESteamHardwareTypeSteamMachine</strong></td>
+            <td>2</td>
+            <td>Running on a Steam Machine.</td>
+        </tr>
+        <tr id="k_ESteamHardwareTypeSteamFrame">
+            <td><strong>k_ESteamHardwareTypeSteamFrame</strong></td>
+            <td>3</td>
+            <td>Running on a Steam Frame.</td>
         </tr>
     </tbody>
 </table>

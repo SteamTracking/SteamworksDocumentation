@@ -5305,6 +5305,16 @@ specify the sorting and filtering for queries across all available UGC.<br />
             <td>19</td>
             <td>Sort by last updated time.</td>
         </tr>
+        <tr id="k_EUGCQuery_RankedByNumParentItems">
+            <td><strong>k_EUGCQuery_RankedByNumParentItems</strong></td>
+            <td>20</td>
+            <td>Sort by how many items depend on this item (if it isn't a collection).</td>
+        </tr>
+        <tr id="k_EUGCRankedByNumParentCollections">
+            <td><strong>k_EUGCRankedByNumParentCollections</strong></td>
+            <td>21</td>
+            <td>Sort by how many collections contain this item.</td>
+        </tr>
     </tbody>
 </table>
 <h2 class="bb_subsection"><a name="EUserUGCList"></a>EUserUGCList</h2>
@@ -5476,7 +5486,7 @@ Developers can use
 manage content descriptors a piece of UGC has. These can be retrieved from the result of a query via
 <a href="/doc/api/ISteamUGC#GetQueryUGCContentDescriptors"
     >ISteamUGC::GetQueryUGCContentDescriptors</a
->. <br />
+>.<br />
 <br />
 <table>
     <tbody>

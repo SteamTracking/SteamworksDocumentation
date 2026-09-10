@@ -781,6 +781,59 @@ A new asynchronous server list request object.<br />
     >ISteamMatchmakingServers::ReleaseRequest</a
 >
 when you're done using it!
+<h2 class="bb_subsection"><a name="ServerRules"></a>ServerFriends</h2>
+<div class="bb_code cpp">
+    HServerQuery ServerFriends( uint32 unIP, uint16 usPort, ISteamMatchmakingRulesResponse
+    *pRequestServersResponse );
+</div>
+<table>
+    <tbody>
+        <tr>
+            <th>Name</th>
+            <th>Type</th>
+            <th>Description</th>
+        </tr>
+        <tr>
+            <td><strong>unIP</strong></td>
+            <td><a href="/doc/api/steam_api#uint32">uint32</a></td>
+            <td>
+                The IP of the game server you are querying in host order, i.e 127.0.0.1 ==
+                0x7f000001.
+            </td>
+        </tr>
+        <tr>
+            <td><strong>usPort</strong></td>
+            <td><a href="/doc/api/steam_api#uint16">uint16</a></td>
+            <td>The port of the game server you are querying, in host order.</td>
+        </tr>
+        <tr>
+            <td><strong>pRequestServersResponse</strong></td>
+            <td>ISteamMatchmakingServerFriendsResponse *</td>
+            <td>
+                This must be the object that inherits from
+                <code class="bb_code bb_code_inline nohighlight"
+                    >ISteamMatchmakingServerFriendsResponse</code
+                >. Typically <code class="bb_code bb_code_inline nohighlight">this</code>.
+            </td>
+        </tr>
+    </tbody>
+</table>
+<br />
+Queries an individual game servers directly via IP/Port to request the list of friends that have
+played on this server.<br />
+<br />
+You must inherit from the
+<code class="bb_code bb_code_inline nohighlight">ISteamMatchmakingServerFriendsResponse</code>
+object to receive this callback.
+<h4>ISteamMatchmakingServerFriendsResponse</h4>
+Callback interface for receiving responses after pinging an individual server.<br />
+<br />
+If you are destructing an object that implements this interface then you should call
+<a href="/doc/api/ISteamMatchmakingServers#CancelServerQuery"
+    >ISteamMatchmakingServers::CancelServerQuery</a
+>
+passing in the handle to the query which is in progress. Failure to cancel in progress queries when
+destructing a callback handler may result in a crash when a callback later occurs.
 <h2 class="bb_subsection"><a name="ServerRules"></a>ServerRules</h2>
 <div class="bb_code cpp">
     HServerQuery ServerRules( uint32 unIP, uint16 usPort, ISteamMatchmakingRulesResponse
@@ -998,7 +1051,14 @@ The following filter operations ignore the "value" part of MatchMakingKeyValuePa
     </li>
     <li>
         "linux"<br />
-        Server passes the filter if it's a linux server.
+        Server passes the filter if it's a linux server.<br />
+    </li>
+    <li>
+        "popularamongfriends"<br />
+        Server passes the filter if it is popular among friends as long as the game is not private,
+        the friend profiles are not private, and the friend state is not offline/invisible during
+        play. Additionally, the server must not set the "nofriendshare" tag and the game must not be
+        opted out of saving/showing coplay data.
     </li>
 </ul>
 <br />
