@@ -459,6 +459,7 @@
     "sitelicense/licensees/intermediaries",
     "sitelicense/licensees/signup",
     "sitelicense/publisher",
+    "sitelicense/users",
     "steamdeck",
     "steamdeck/brandguidelines",
     "steamdeck/compat",
