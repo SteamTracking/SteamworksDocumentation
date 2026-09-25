@@ -519,6 +519,7 @@
     "steamhardware/steamframe/engines/godot",
     "steamhardware/steamframe/engines/unity",
     "steamhardware/steamframe/engines/unreal",
+    "steamhardware/steamframe/input",
     "steamhardware/steamframe/loadgames",
     "steamhardware/steamframe/setup",
     "steamhardware/steamframe/vrpreferences",

@@ -1,0 +1,161 @@
+<h1>Steam Frame Input</h1>
+<h2 class="bb_section"><a name="1"></a>Controllers</h2>
+<br />
+The Steam Frame Controllers have the same capabilities as your standard console gaming controllers
+plus touch states, grip buttons, capacitive finger tracking, and 6-DOF spatial tracking. This gives
+you many more options on how to let players interact with your titles. It also allows users to play
+non-VR content on the headset without a separate device.<br />
+<br />
+<img
+    src="https://shared.steamstatic.com/community_assets/images/steamworks_docs/english/steamframe-controllers_1.png"
+    alt="steamframe-controllers_1.png"
+    title="steamframe-controllers_1.png"
+/>
+<h2 class="bb_subsection"><a name="2"></a>VR Compatibility</h2>
+While you will always get a better user experience by tailoring your title to the Frame Controllers
+specifically, our controller compatibility modes have become quite robust. SteamVR will always use a
+Frame Controller binding by default but in the case one is not available it will first look for a
+<a
+    href="https://registry.khronos.org/OpenXR/specs/1.1/html/xrspec.html#XR_KHR_generic_controller"
+    target="_blank"
+    rel="noreferrer"
+    >OpenXR Generic Controller</a
+>
+binding, then an
+<a
+    href="https://registry.khronos.org/OpenXR/specs/1.1/html/xrspec.html#semantic-paths-oculus-touch-controller-profile"
+    target="_blank"
+    rel="noreferrer"
+    >Oculus Touch</a
+>
+binding, and remap those to the Frame Controller layout. <br />
+<ul>
+    <li>
+        The menu button on Oculus Touch will map to the View button at the top of the Steam Frame
+        Controller.<br />
+    </li>
+    <li>
+        The top button of the Oculus Touch controllers (B / Y) will map to all three top buttons of
+        the Steam Frame Controllers (Dpad Left, Dpad Up, Dpad Right / X, Y, B).
+    </li>
+</ul>
+<h2 class="bb_subsection"><a name="3"></a>Non-VR Compatibility</h2>
+When playing Non-VR titles locally or via streaming the Frame Controllers take full advantage of
+<a href="/doc/features/steam_controller">Steam Input</a>. Depending on the game and the configured
+bindings it will show up as a generic gamepad or keyboard/mouse.
+<h2 class="bb_subsection"><a name="openxr"></a>OpenXR Interaction Profile</h2>
+You'll find an OpenXR Interaction Profile included in each Game Engine plugin (or in the case of
+Godot in the engine itself). If you have your own custom engine you can add support via our
+extension detailed on the
+<a href="/doc/steamframe/engines/custom">steamframe/engines/custom</a> documentation page.<br />
+<br />
+To enable the interaction profile you must request to use the extension: <br />
+<div class="bb_code">XR_VALVE_frame_controller_interaction</div>
+<br />
+Then you can suggest bindings for the interaction profile path:<br />
+<div class="bb_code">/interaction_profiles/valve/frame_controller_valve</div>
+<br />
+You can use the following paths:<br />
+<div class="bb_code">
+    "/user/hand/right/input/a/touch", XR_ACTION_TYPE_BOOLEAN_INPUT "/user/hand/right/input/a/click",
+    XR_ACTION_TYPE_BOOLEAN_INPUT "/user/hand/right/input/b/touch", XR_ACTION_TYPE_BOOLEAN_INPUT
+    "/user/hand/right/input/b/click", XR_ACTION_TYPE_BOOLEAN_INPUT "/user/hand/right/input/x/touch",
+    XR_ACTION_TYPE_BOOLEAN_INPUT "/user/hand/right/input/x/click", XR_ACTION_TYPE_BOOLEAN_INPUT
+    "/user/hand/right/input/y/touch", XR_ACTION_TYPE_BOOLEAN_INPUT "/user/hand/right/input/y/click",
+    XR_ACTION_TYPE_BOOLEAN_INPUT "/user/hand/right/input/menu/touch", XR_ACTION_TYPE_BOOLEAN_INPUT
+    "/user/hand/right/input/menu/click", XR_ACTION_TYPE_BOOLEAN_INPUT
+    "/user/hand/right/input/system/touch", XR_ACTION_TYPE_BOOLEAN_INPUT
+    "/user/hand/right/input/system/click", XR_ACTION_TYPE_BOOLEAN_INPUT
+    "/user/hand/right/input/bumper/touch", XR_ACTION_TYPE_BOOLEAN_INPUT
+    "/user/hand/right/input/bumper/click", XR_ACTION_TYPE_BOOLEAN_INPUT
+    "/user/hand/right/input/squeeze/touch", XR_ACTION_TYPE_BOOLEAN_INPUT
+    "/user/hand/right/input/squeeze/click", XR_ACTION_TYPE_BOOLEAN_INPUT
+    "/user/hand/right/input/squeeze/value", XR_ACTION_TYPE_FLOAT_INPUT
+    "/user/hand/right/input/trigger/touch", XR_ACTION_TYPE_BOOLEAN_INPUT
+    "/user/hand/right/input/trigger/click", XR_ACTION_TYPE_BOOLEAN_INPUT
+    "/user/hand/right/input/trigger/value", XR_ACTION_TYPE_FLOAT_INPUT
+    "/user/hand/right/input/thumbstick/touch", XR_ACTION_TYPE_BOOLEAN_INPUT
+    "/user/hand/right/input/thumbstick/click", XR_ACTION_TYPE_BOOLEAN_INPUT
+    "/user/hand/right/input/thumbstick/x", XR_ACTION_TYPE_FLOAT_INPUT
+    "/user/hand/right/input/thumbstick/y", XR_ACTION_TYPE_FLOAT_INPUT
+    "/user/hand/right/input/thumbstick", XR_ACTION_TYPE_VECTOR2F_INPUT
+    "/user/hand/right/input/grip/pose", XR_ACTION_TYPE_POSE_INPUT "/user/hand/right/input/aim/pose",
+    XR_ACTION_TYPE_POSE_INPUT "/user/hand/right/output/haptic", XR_ACTION_TYPE_VIBRATION_OUTPUT
+    "/user/hand/left/input/dpad_up/touch", XR_ACTION_TYPE_BOOLEAN_INPUT
+    "/user/hand/left/input/dpad_up/click", XR_ACTION_TYPE_BOOLEAN_INPUT
+    "/user/hand/left/input/dpad_left/touch", XR_ACTION_TYPE_BOOLEAN_INPUT
+    "/user/hand/left/input/dpad_left/click", XR_ACTION_TYPE_BOOLEAN_INPUT
+    "/user/hand/left/input/dpad_down/touch", XR_ACTION_TYPE_BOOLEAN_INPUT
+    "/user/hand/left/input/dpad_down/click", XR_ACTION_TYPE_BOOLEAN_INPUT
+    "/user/hand/left/input/dpad_right/touch", XR_ACTION_TYPE_BOOLEAN_INPUT
+    "/user/hand/left/input/dpad_right/click", XR_ACTION_TYPE_BOOLEAN_INPUT
+    "/user/hand/left/input/view/touch", XR_ACTION_TYPE_BOOLEAN_INPUT
+    "/user/hand/left/input/view/click", XR_ACTION_TYPE_BOOLEAN_INPUT
+    "/user/hand/left/input/system/touch", XR_ACTION_TYPE_BOOLEAN_INPUT
+    "/user/hand/left/input/system/click", XR_ACTION_TYPE_BOOLEAN_INPUT
+    "/user/hand/left/input/bumper/touch", XR_ACTION_TYPE_BOOLEAN_INPUT
+    "/user/hand/left/input/bumper/click", XR_ACTION_TYPE_BOOLEAN_INPUT
+    "/user/hand/left/input/squeeze/touch", XR_ACTION_TYPE_BOOLEAN_INPUT
+    "/user/hand/left/input/squeeze/click", XR_ACTION_TYPE_BOOLEAN_INPUT
+    "/user/hand/left/input/squeeze/value", XR_ACTION_TYPE_FLOAT_INPUT
+    "/user/hand/left/input/trigger/touch", XR_ACTION_TYPE_BOOLEAN_INPUT
+    "/user/hand/left/input/trigger/click", XR_ACTION_TYPE_BOOLEAN_INPUT
+    "/user/hand/left/input/trigger/value", XR_ACTION_TYPE_FLOAT_INPUT
+    "/user/hand/left/input/thumbstick/touch", XR_ACTION_TYPE_BOOLEAN_INPUT
+    "/user/hand/left/input/thumbstick/click", XR_ACTION_TYPE_BOOLEAN_INPUT
+    "/user/hand/left/input/thumbstick/x", XR_ACTION_TYPE_FLOAT_INPUT
+    "/user/hand/left/input/thumbstick/y", XR_ACTION_TYPE_FLOAT_INPUT
+    "/user/hand/left/input/thumbstick", XR_ACTION_TYPE_VECTOR2F_INPUT
+    "/user/hand/left/input/grip/pose", XR_ACTION_TYPE_POSE_INPUT "/user/hand/left/input/aim/pose",
+    XR_ACTION_TYPE_POSE_INPUT "/user/hand/left/output/haptic", XR_ACTION_TYPE_VIBRATION_OUTPUT
+</div>
+<h2 class="bb_subsection"><a name="openvr"></a>OpenVR Bindings</h2>
+You can bind to the Steam Frame Controllers like you would any other OpenVR controller type. Its
+<strong>controller_type</strong> is
+<code class="bb_code bb_code_inline nohighlight">"frame_controller"</code>. They support finger
+tracking via the
+<a
+    href="https://github.com/ValveSoftware/openvr/wiki/SteamVR-Skeletal-Input/4db5b685942e4b84f16bb3796143e292ad9226e6"
+    target="_blank"
+    rel="noreferrer"
+    >Skeletal Input API</a
+>
+and all of the controls listed above. You can create bindings for it in the SteamVR Binding UI.<br />
+<br />
+<div class="bb_code">
+    Left Controller "/user/hand/left/input/dpad_up": click, touch "/user/hand/left/input/dpad_down":
+    click, touch "/user/hand/left/input/dpad_left": click, touch "/user/hand/left/input/dpad_right":
+    click, touch "/user/hand/left/input/view": click, touch "/user/hand/left/input/bumper": click,
+    touch "/user/hand/left/input/trigger": click, touch, value 1d "/user/hand/left/input/grip":
+    click, touch, value 1d "/user/hand/left/input/thumbstick": click, touch, value 2d
+    "/user/hand/left/input/system": click, touch Right Controller "/user/hand/right/input/a": click,
+    touch "/user/hand/right/input/b": click, touch "/user/hand/right/input/x": click, touch
+    "/user/hand/right/input/y": click, touch "/user/hand/right/input/menu": click, touch
+    "/user/hand/right/input/bumper": click, touch "/user/hand/right/input/trigger": click, touch,
+    value 1d "/user/hand/right/input/grip": click, touch, value 1d
+    "/user/hand/right/input/thumbstick": click, touch, value 2d "/user/hand/right/input/system":
+    click, touch
+</div>
+<h2 class="bb_section"><a name="4"></a>HMD</h2>
+<br />
+It is unlikely that you will have a reason to need the hmd name, but if you do, its
+<strong>controller_type</strong> is
+<code class="bb_code bb_code_inline nohighlight">"frame_hmd"</code>. Be sure NOT to use this for
+determining the type of controllers the user currently has. Many users choose to mix and match hmds
+and controllers.
+<h2 class="bb_section"><a name="5"></a>Eye Tracking</h2>
+<h2 class="bb_subsection"><a name="6"></a>OpenXR</h2>
+Our current support for eye tracking uses the <strong>XR_EXT_eye_gaze_interaction </strong>OpenXR
+extension. You can find details about that on the
+<a
+    href="https://registry.khronos.org/OpenXR/specs/1.0/html/xrspec.html#XR_EXT_eye_gaze_interaction"
+    target="_blank"
+    rel="noreferrer"
+    >OpenXR spec site here</a
+>.
+<h2 class="bb_subsection"><a name="7"></a>OpenVR</h2>
+OpenVR has two functions in IVRInput <strong>GetEyeTrackingDataRelativeToNow</strong> and
+<strong>GetEyeTrackingDataForNextFrame</strong>. To use those you will need to create a new action
+of type <code class="bb_code bb_code_inline nohighlight">"eyetracking"</code> to pass into the
+functions.<br />
+<br />

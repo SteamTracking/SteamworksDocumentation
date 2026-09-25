@@ -23,72 +23,7 @@ those controls and it will work. If you would like to bind to Frame Controller s
 have Frame Controller specific offsets you can use the Steam Frame Controller OpenXR Interaction
 Profile or use the Frame Controller OpenVR Controller type: <strong>frame_controller</strong>.
 <h2 class="bb_subsection"><a name="2"></a>OpenXR</h2>
-To enable the interaction profile you must request to use the extension: <br />
-<div class="bb_code">XR_VALVE_frame_controller_interaction</div>
-<br />
-Then you can suggest bindings for the interaction profile path:<br />
-<div class="bb_code">/interaction_profiles/valve/frame_controller_valve</div>
-<div class="bb_callout">
-    <div>
-        This was changed from /interaction_profiles/valve/frame_controller to
-        /interaction_profiles/valve/frame_controller_valve as of SteamVR 2.15.1
-    </div>
-</div>
-<br />
-You can use the following paths:<br />
-<div class="bb_code">
-    "/user/hand/right/input/a/touch", XR_ACTION_TYPE_BOOLEAN_INPUT "/user/hand/right/input/a/click",
-    XR_ACTION_TYPE_BOOLEAN_INPUT "/user/hand/right/input/b/touch", XR_ACTION_TYPE_BOOLEAN_INPUT
-    "/user/hand/right/input/b/click", XR_ACTION_TYPE_BOOLEAN_INPUT "/user/hand/right/input/x/touch",
-    XR_ACTION_TYPE_BOOLEAN_INPUT "/user/hand/right/input/x/click", XR_ACTION_TYPE_BOOLEAN_INPUT
-    "/user/hand/right/input/y/touch", XR_ACTION_TYPE_BOOLEAN_INPUT "/user/hand/right/input/y/click",
-    XR_ACTION_TYPE_BOOLEAN_INPUT "/user/hand/right/input/menu/touch", XR_ACTION_TYPE_BOOLEAN_INPUT
-    "/user/hand/right/input/menu/click", XR_ACTION_TYPE_BOOLEAN_INPUT
-    "/user/hand/right/input/system/touch", XR_ACTION_TYPE_BOOLEAN_INPUT
-    "/user/hand/right/input/system/click", XR_ACTION_TYPE_BOOLEAN_INPUT
-    "/user/hand/right/input/bumper/touch", XR_ACTION_TYPE_BOOLEAN_INPUT
-    "/user/hand/right/input/bumper/click", XR_ACTION_TYPE_BOOLEAN_INPUT
-    "/user/hand/right/input/squeeze/touch", XR_ACTION_TYPE_BOOLEAN_INPUT
-    "/user/hand/right/input/squeeze/click", XR_ACTION_TYPE_BOOLEAN_INPUT
-    "/user/hand/right/input/squeeze/value", XR_ACTION_TYPE_FLOAT_INPUT
-    "/user/hand/right/input/trigger/touch", XR_ACTION_TYPE_BOOLEAN_INPUT
-    "/user/hand/right/input/trigger/click", XR_ACTION_TYPE_BOOLEAN_INPUT
-    "/user/hand/right/input/trigger/value", XR_ACTION_TYPE_FLOAT_INPUT
-    "/user/hand/right/input/thumbstick/touch", XR_ACTION_TYPE_BOOLEAN_INPUT
-    "/user/hand/right/input/thumbstick/click", XR_ACTION_TYPE_BOOLEAN_INPUT
-    "/user/hand/right/input/thumbstick/x", XR_ACTION_TYPE_FLOAT_INPUT
-    "/user/hand/right/input/thumbstick/y", XR_ACTION_TYPE_FLOAT_INPUT
-    "/user/hand/right/input/thumbstick", XR_ACTION_TYPE_VECTOR2F_INPUT
-    "/user/hand/right/input/grip/pose", XR_ACTION_TYPE_POSE_INPUT "/user/hand/right/input/aim/pose",
-    XR_ACTION_TYPE_POSE_INPUT "/user/hand/right/output/haptic", XR_ACTION_TYPE_VIBRATION_OUTPUT
-    "/user/hand/left/input/dpad_up/touch", XR_ACTION_TYPE_BOOLEAN_INPUT
-    "/user/hand/left/input/dpad_up/click", XR_ACTION_TYPE_BOOLEAN_INPUT
-    "/user/hand/left/input/dpad_left/touch", XR_ACTION_TYPE_BOOLEAN_INPUT
-    "/user/hand/left/input/dpad_left/click", XR_ACTION_TYPE_BOOLEAN_INPUT
-    "/user/hand/left/input/dpad_down/touch", XR_ACTION_TYPE_BOOLEAN_INPUT
-    "/user/hand/left/input/dpad_down/click", XR_ACTION_TYPE_BOOLEAN_INPUT
-    "/user/hand/left/input/dpad_right/touch", XR_ACTION_TYPE_BOOLEAN_INPUT
-    "/user/hand/left/input/dpad_right/click", XR_ACTION_TYPE_BOOLEAN_INPUT
-    "/user/hand/left/input/view/touch", XR_ACTION_TYPE_BOOLEAN_INPUT
-    "/user/hand/left/input/view/click", XR_ACTION_TYPE_BOOLEAN_INPUT
-    "/user/hand/left/input/system/touch", XR_ACTION_TYPE_BOOLEAN_INPUT
-    "/user/hand/left/input/system/click", XR_ACTION_TYPE_BOOLEAN_INPUT
-    "/user/hand/left/input/bumper/touch", XR_ACTION_TYPE_BOOLEAN_INPUT
-    "/user/hand/left/input/bumper/click", XR_ACTION_TYPE_BOOLEAN_INPUT
-    "/user/hand/left/input/squeeze/touch", XR_ACTION_TYPE_BOOLEAN_INPUT
-    "/user/hand/left/input/squeeze/click", XR_ACTION_TYPE_BOOLEAN_INPUT
-    "/user/hand/left/input/squeeze/value", XR_ACTION_TYPE_FLOAT_INPUT
-    "/user/hand/left/input/trigger/touch", XR_ACTION_TYPE_BOOLEAN_INPUT
-    "/user/hand/left/input/trigger/click", XR_ACTION_TYPE_BOOLEAN_INPUT
-    "/user/hand/left/input/trigger/value", XR_ACTION_TYPE_FLOAT_INPUT
-    "/user/hand/left/input/thumbstick/touch", XR_ACTION_TYPE_BOOLEAN_INPUT
-    "/user/hand/left/input/thumbstick/click", XR_ACTION_TYPE_BOOLEAN_INPUT
-    "/user/hand/left/input/thumbstick/x", XR_ACTION_TYPE_FLOAT_INPUT
-    "/user/hand/left/input/thumbstick/y", XR_ACTION_TYPE_FLOAT_INPUT
-    "/user/hand/left/input/thumbstick", XR_ACTION_TYPE_VECTOR2F_INPUT
-    "/user/hand/left/input/grip/pose", XR_ACTION_TYPE_POSE_INPUT "/user/hand/left/input/aim/pose",
-    XR_ACTION_TYPE_POSE_INPUT "/user/hand/left/output/haptic", XR_ACTION_TYPE_VIBRATION_OUTPUT
-</div>
+See <a href="/doc/steamhardware/steamframe/input">Steam Frame Input</a> for details.
 <h2 class="bb_subsection"><a name="3"></a>Foveated Rendering</h2>
 SteamVR supports the following recommended OpenXR extensions:<br />
 <ul>
