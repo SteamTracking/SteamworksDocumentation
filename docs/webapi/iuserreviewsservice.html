@@ -1,0 +1,571 @@
+<h1>IUserReviewsService</h1>
+Methods for reading Steam user reviews.<br />
+<br />
+Use this interface to get a dump of the reviews on an application in Steam. It replaces
+<code class="bb_code bb_code_inline nohighlight"
+    >store.steampowered.com/appreviews/&lt;appid&gt;?json=1</code
+>; see <a href="#migrating">Migrating from /appreviews</a> below.<br />
+<br />
+<strong>NOTE:</strong> This is a Service interface, methods in this interface should be called with
+the <code class="bb_code bb_code_inline nohighlight">input_json</code> parameter.<br />
+<br />
+For more info on how to use the Steamworks Web API please see the
+<a href="/doc/webapi_overview">Web API Overview</a>.
+<h2 class="bb_section"><a name="GetAppReviews"></a>GetAppReviews</h2>
+<div class="bb_code http">
+    GET https://api.steampowered.com/IUserReviewsService/GetAppReviews/v1/
+</div>
+<table>
+    <tbody>
+        <tr>
+            <th>Name</th>
+            <th>Type</th>
+            <th>Required</th>
+            <th>Description</th>
+        </tr>
+        <tr>
+            <td><strong>key</strong></td>
+            <td>string</td>
+            <td></td>
+            <td>
+                (Optional) Steamworks Web API publisher authentication key. Pass a key associated
+                with the app to get the higher rate limit.
+            </td>
+        </tr>
+        <tr>
+            <td><strong>appid</strong></td>
+            <td>uint32</td>
+            <td>✔</td>
+            <td>App to get reviews for.</td>
+        </tr>
+        <tr>
+            <td><strong>filter</strong></td>
+            <td>int32</td>
+            <td></td>
+            <td>
+                <a href="/doc/webapi/IUserReviewsService#EUserReviewsAppReviewsFilter"
+                    >IUserReviewsService#EUserReviewsAppReviewsFilter</a
+                >. Sort order of the results. Defaults to k_EUserReviewsAppReviewsFilter_Helpful,
+                which widens <code class="bb_code bb_code_inline nohighlight">day_range</code> until
+                it finds results, so it will always return reviews. If paging through all the
+                reviews with <code class="bb_code bb_code_inline nohighlight">cursor</code>, use
+                Recent or Updated to eventually receive an empty list.
+            </td>
+        </tr>
+        <tr>
+            <td><strong>languages</strong></td>
+            <td>string[]</td>
+            <td></td>
+            <td>
+                API language codes to return reviews in (see
+                <a href="/doc/store/localization/languages">Languages Supported on Steam</a>). Empty
+                means english; "all" means every language. Example usage: languages[0]='english',
+                languages[1]='french', etc.
+            </td>
+        </tr>
+        <tr>
+            <td><strong>day_range</strong></td>
+            <td>uint32</td>
+            <td></td>
+            <td>
+                Only used by the Helpful filter. Number of days back from today to look for reviews.
+                Defaults to 30, max 365; 0 means no limit.
+            </td>
+        </tr>
+        <tr>
+            <td><strong>cursor</strong></td>
+            <td>string</td>
+            <td></td>
+            <td>
+                Cursor to paginate through the results. Set to '*' or omit for the first request,
+                then pass the <code class="bb_code bb_code_inline nohighlight">cursor</code> value
+                returned in the previous response. Cursor values may contain characters that need to
+                be URL-encoded.
+            </td>
+        </tr>
+        <tr>
+            <td><strong>review_type</strong></td>
+            <td>int32</td>
+            <td></td>
+            <td>
+                <a href="/doc/webapi/IUserReviewsService#EUserReviewsReviewType"
+                    >IUserReviewsService#EUserReviewsReviewType</a
+                >. Defaults to k_EUserReviewsReviewType_All.
+            </td>
+        </tr>
+        <tr>
+            <td><strong>purchase_type</strong></td>
+            <td>int32</td>
+            <td></td>
+            <td>
+                <a href="/doc/webapi/IUserReviewsService#EUserReviewsPurchaseType"
+                    >IUserReviewsService#EUserReviewsPurchaseType</a
+                >. Defaults to k_EUserReviewsPurchaseType_Steam.
+            </td>
+        </tr>
+        <tr>
+            <td><strong>num_per_page</strong></td>
+            <td>uint32</td>
+            <td></td>
+            <td>Number of reviews to return per page. Defaults to 20, max 100.</td>
+        </tr>
+        <tr>
+            <td><strong>filter_offtopic_activity</strong></td>
+            <td>bool</td>
+            <td></td>
+            <td>
+                By default, off-topic reviews (aka "Review Bombs") are filtered out. Pass false to
+                include them. See <a href="/doc/store/reviews#ReviewBombing">here</a>.
+            </td>
+        </tr>
+        <tr>
+            <td><strong>display_language</strong></td>
+            <td>string</td>
+            <td></td>
+            <td>
+                API language code for
+                <code class="bb_code bb_code_inline nohighlight">review_score_desc</code> in the
+                response. Defaults to english.
+            </td>
+        </tr>
+        <tr>
+            <td><strong>use_review_quality</strong></td>
+            <td>bool</td>
+            <td></td>
+            <td>
+                Helpful filter only. Ranks reviews that Steam has judged to be low quality (ASCII
+                art, memes, off-topic, uninformative, vote farming) below the others. Defaults to
+                true. If false, the Helpful filter sorts by
+                <code class="bb_code bb_code_inline nohighlight">weighted_vote_score</code> and,
+                unless <code class="bb_code bb_code_inline nohighlight">day_range</code> is 0, only
+                returns reviews with a score of at least 0.5 and at least one helpful vote.
+            </td>
+        </tr>
+        <tr>
+            <td><strong>date_range_start</strong></td>
+            <td>uint32</td>
+            <td></td>
+            <td>
+                Unix timestamp. Only return reviews created at or after this time. Ignored unless
+                <code class="bb_code bb_code_inline nohighlight">date_range_end</code> is also set.
+            </td>
+        </tr>
+        <tr>
+            <td><strong>date_range_end</strong></td>
+            <td>uint32</td>
+            <td></td>
+            <td>
+                Unix timestamp. Only return reviews created at or before this time. Ignored unless
+                <code class="bb_code bb_code_inline nohighlight">date_range_start</code> is also
+                set.
+            </td>
+        </tr>
+        <tr>
+            <td><strong>date_range_exclude</strong></td>
+            <td>bool</td>
+            <td></td>
+            <td>If true, exclude reviews inside the date range instead of returning only them.</td>
+        </tr>
+        <tr>
+            <td><strong>playtime_min_hours</strong></td>
+            <td>uint32</td>
+            <td></td>
+            <td>
+                Only return reviews whose author had at least this many hours in the app when the
+                review was written.
+            </td>
+        </tr>
+        <tr>
+            <td><strong>playtime_max_hours</strong></td>
+            <td>uint32</td>
+            <td></td>
+            <td>
+                Only return reviews whose author had at most this many hours in the app when the
+                review was written.
+            </td>
+        </tr>
+        <tr>
+            <td><strong>primarily_steam_deck</strong></td>
+            <td>bool</td>
+            <td></td>
+            <td>
+                Only return reviews whose author had played more than half their time on Steam Deck
+                when the review was written.
+            </td>
+        </tr>
+        <tr>
+            <td><strong>hardware_os</strong></td>
+            <td>string</td>
+            <td></td>
+            <td>Only return reviews written on hardware with this operating system.</td>
+        </tr>
+        <tr>
+            <td><strong>hardware_cpu</strong></td>
+            <td>string</td>
+            <td></td>
+            <td>Only return reviews written on hardware with this CPU.</td>
+        </tr>
+        <tr>
+            <td><strong>hardware_gpu</strong></td>
+            <td>string</td>
+            <td></td>
+            <td>Only return reviews written on hardware with this GPU.</td>
+        </tr>
+        <tr>
+            <td><strong>hardware_device_type</strong></td>
+            <td>string</td>
+            <td></td>
+            <td>Only return reviews written on this type of device.</td>
+        </tr>
+    </tbody>
+</table>
+<br />
+Gets a page of public reviews for an app.<br />
+<br />
+This method does not require a key, and anonymous responses may be cached for up to 10 minutes.
+Calls without a key associated with the app share a lower rate limit; a rate-limited call returns
+HTTP 429.<br />
+<br />
+<strong>Response:</strong><br />
+<table>
+    <tbody>
+        <tr>
+            <th>Name</th>
+            <th>Type</th>
+            <th>Description</th>
+        </tr>
+        <tr>
+            <td><strong>query_summary</strong></td>
+            <td>{message}</td>
+            <td>
+                Totals for the query.
+                <code class="bb_code bb_code_inline nohighlight">num_reviews</code> is the number of
+                reviews on this page. The score fields (<code
+                    class="bb_code bb_code_inline nohighlight"
+                    >review_score</code
+                >, <code class="bb_code bb_code_inline nohighlight">review_score_desc</code>,
+                <code class="bb_code bb_code_inline nohighlight">total_positive</code>,
+                <code class="bb_code bb_code_inline nohighlight">total_negative</code>,
+                <code class="bb_code bb_code_inline nohighlight">total_reviews</code>) are only
+                returned on the first page, and only when
+                <code class="bb_code bb_code_inline nohighlight">review_type</code> is
+                k_EUserReviewsReviewType_All.
+            </td>
+        </tr>
+        <tr>
+            <td><strong>reviews</strong></td>
+            <td>{message}[]</td>
+            <td>The reviews on this page. See below.</td>
+        </tr>
+        <tr>
+            <td><strong>cursor</strong></td>
+            <td>string</td>
+            <td>
+                Pass this as <code class="bb_code bb_code_inline nohighlight">cursor</code> to get
+                the next page.
+            </td>
+        </tr>
+        <tr>
+            <td><strong>day_range_used</strong></td>
+            <td>uint32</td>
+            <td>
+                Helpful filter only. The day range actually searched. Can be wider than
+                <code class="bb_code bb_code_inline nohighlight">day_range</code> when the requested
+                range had no reviews; 0 means no limit.
+            </td>
+        </tr>
+        <tr>
+            <td><strong>total_matching</strong></td>
+            <td>uint32</td>
+            <td>Total number of reviews that match the query.</td>
+        </tr>
+    </tbody>
+</table>
+<br />
+Each entry in <code class="bb_code bb_code_inline nohighlight">reviews</code>:<br />
+<table>
+    <tbody>
+        <tr>
+            <th>Name</th>
+            <th>Type</th>
+            <th>Description</th>
+        </tr>
+        <tr>
+            <td><strong>recommendationid</strong></td>
+            <td>uint64</td>
+            <td>Unique ID of the review.</td>
+        </tr>
+        <tr>
+            <td><strong>author</strong></td>
+            <td>{message}</td>
+            <td>See below.</td>
+        </tr>
+        <tr>
+            <td><strong>language</strong></td>
+            <td>string</td>
+            <td>API language code the review was written in.</td>
+        </tr>
+        <tr>
+            <td><strong>review</strong></td>
+            <td>string</td>
+            <td>Text of the review.</td>
+        </tr>
+        <tr>
+            <td><strong>timestamp_created</strong></td>
+            <td>uint32</td>
+            <td>Unix timestamp when the review was created.</td>
+        </tr>
+        <tr>
+            <td><strong>timestamp_updated</strong></td>
+            <td>uint32</td>
+            <td>Unix timestamp when the review was last updated.</td>
+        </tr>
+        <tr>
+            <td><strong>voted_up</strong></td>
+            <td>bool</td>
+            <td>True if this is a positive review.</td>
+        </tr>
+        <tr>
+            <td><strong>votes_up</strong></td>
+            <td>uint32</td>
+            <td>Number of users who found this review helpful.</td>
+        </tr>
+        <tr>
+            <td><strong>votes_funny</strong></td>
+            <td>uint32</td>
+            <td>Number of users who found this review funny.</td>
+        </tr>
+        <tr>
+            <td><strong>weighted_vote_score</strong></td>
+            <td>float</td>
+            <td>Helpfulness score.</td>
+        </tr>
+        <tr>
+            <td><strong>comment_count</strong></td>
+            <td>uint32</td>
+            <td>Number of comments posted on this review.</td>
+        </tr>
+        <tr>
+            <td><strong>steam_purchase</strong></td>
+            <td>bool</td>
+            <td>True if the author purchased the app on Steam.</td>
+        </tr>
+        <tr>
+            <td><strong>received_for_free</strong></td>
+            <td>bool</td>
+            <td>True if the author checked the box saying they got the app for free.</td>
+        </tr>
+        <tr>
+            <td><strong>written_during_early_access</strong></td>
+            <td>bool</td>
+            <td>True if the review was written while the app was in Early Access.</td>
+        </tr>
+        <tr>
+            <td><strong>developer_response</strong></td>
+            <td>string</td>
+            <td>Text of the developer's response, if any.</td>
+        </tr>
+        <tr>
+            <td><strong>timestamp_dev_responded</strong></td>
+            <td>uint32</td>
+            <td>Unix timestamp when the developer responded.</td>
+        </tr>
+        <tr>
+            <td><strong>primarily_steam_deck</strong></td>
+            <td>bool</td>
+            <td>True if the author played primarily on Steam Deck when the review was written.</td>
+        </tr>
+        <tr>
+            <td><strong>refunded</strong></td>
+            <td>bool</td>
+            <td>True if the author was refunded for the app.</td>
+        </tr>
+    </tbody>
+</table>
+<br />
+The <code class="bb_code bb_code_inline nohighlight">author</code> of each review:<br />
+<table>
+    <tbody>
+        <tr>
+            <th>Name</th>
+            <th>Type</th>
+            <th>Description</th>
+        </tr>
+        <tr>
+            <td><strong>steamid</strong></td>
+            <td>fixed64</td>
+            <td>SteamID of the author.</td>
+        </tr>
+        <tr>
+            <td><strong>num_reviews</strong></td>
+            <td>uint32</td>
+            <td>Number of public reviews the author has written.</td>
+        </tr>
+        <tr>
+            <td><strong>playtime_forever</strong></td>
+            <td>uint32</td>
+            <td>Lifetime playtime in the app, in minutes.</td>
+        </tr>
+        <tr>
+            <td><strong>playtime_last_two_weeks</strong></td>
+            <td>uint32</td>
+            <td>Playtime in the last two weeks, in minutes.</td>
+        </tr>
+        <tr>
+            <td><strong>playtime_at_review</strong></td>
+            <td>uint32</td>
+            <td>Playtime when the review was written, in minutes.</td>
+        </tr>
+        <tr>
+            <td><strong>deck_playtime_at_review</strong></td>
+            <td>uint32</td>
+            <td>Steam Deck playtime when the review was written, in minutes.</td>
+        </tr>
+        <tr>
+            <td><strong>last_played</strong></td>
+            <td>uint32</td>
+            <td>Unix timestamp when the author last played the app.</td>
+        </tr>
+    </tbody>
+</table>
+<h2 class="bb_section"><a name="migrating"></a>Migrating from /appreviews</h2>
+<code class="bb_code bb_code_inline nohighlight"
+    >store.steampowered.com/appreviews/&lt;appid&gt;?json=1</code
+>
+is deprecated. GetAppReviews takes the same filters, with these differences:<br />
+<br />
+<ul>
+    <li>
+        Parameters are passed in <code class="bb_code bb_code_inline nohighlight">input_json</code>,
+        and the string values are now enums:
+        <code class="bb_code bb_code_inline nohighlight">filter</code> all/recent/updated is
+        Helpful/Recent/Updated (<a
+            href="/doc/webapi/IUserReviewsService#EUserReviewsAppReviewsFilter"
+            >IUserReviewsService#EUserReviewsAppReviewsFilter</a
+        >), and <code class="bb_code bb_code_inline nohighlight">review_type</code> and
+        <code class="bb_code bb_code_inline nohighlight">purchase_type</code> map to
+        <a href="/doc/webapi/IUserReviewsService#EUserReviewsReviewType"
+            >IUserReviewsService#EUserReviewsReviewType</a
+        >
+        and
+        <a href="/doc/webapi/IUserReviewsService#EUserReviewsPurchaseType"
+            >IUserReviewsService#EUserReviewsPurchaseType</a
+        >.<br />
+    </li>
+    <li>
+        <code class="bb_code bb_code_inline nohighlight">language</code> is now
+        <code class="bb_code bb_code_inline nohighlight">languages</code>, a list.<br />
+    </li>
+    <li>
+        There is a new Funny sort, and new date, playtime, Steam Deck and hardware filters.<br />
+    </li>
+    <li>
+        The response has no <code class="bb_code bb_code_inline nohighlight">success</code> field;
+        check the HTTP status instead.<br />
+    </li>
+    <li>
+        <code class="bb_code bb_code_inline nohighlight">author.num_games_owned</code> is no longer
+        returned.<br />
+    </li>
+    <li>
+        <code class="bb_code bb_code_inline nohighlight">weighted_vote_score</code> is a number, not
+        a string.<br />
+    </li>
+    <li>
+        Each review has a new
+        <code class="bb_code bb_code_inline nohighlight">refunded</code> field.<br />
+    </li>
+    <li>
+        <code class="bb_code bb_code_inline nohighlight">total_matching</code> and
+        <code class="bb_code bb_code_inline nohighlight">day_range_used</code> are new.
+    </li>
+</ul>
+<h2 class="bb_section"><a name="enums"></a>Enums</h2>
+These are enums which are defined for use with IUserReviewsService.
+<h2 class="bb_subsection">
+    <a name="EUserReviewsAppReviewsFilter"></a>EUserReviewsAppReviewsFilter
+</h2>
+How to sort the results of GetAppReviews.<br />
+<br />
+<table>
+    <tbody>
+        <tr>
+            <th>Name</th>
+            <th>Value</th>
+            <th>Description</th>
+        </tr>
+        <tr id="k_EUserReviewsAppReviewsFilter_Helpful">
+            <td><strong>k_EUserReviewsAppReviewsFilter_Helpful</strong></td>
+            <td>0</td>
+            <td>
+                Most helpful, within
+                <code class="bb_code bb_code_inline nohighlight">day_range</code>.
+            </td>
+        </tr>
+        <tr id="k_EUserReviewsAppReviewsFilter_Recent">
+            <td><strong>k_EUserReviewsAppReviewsFilter_Recent</strong></td>
+            <td>1</td>
+            <td>Most recently created.</td>
+        </tr>
+        <tr id="k_EUserReviewsAppReviewsFilter_Updated">
+            <td><strong>k_EUserReviewsAppReviewsFilter_Updated</strong></td>
+            <td>2</td>
+            <td>Most recently updated.</td>
+        </tr>
+        <tr id="k_EUserReviewsAppReviewsFilter_Funny">
+            <td><strong>k_EUserReviewsAppReviewsFilter_Funny</strong></td>
+            <td>3</td>
+            <td>Most votes for funny.</td>
+        </tr>
+    </tbody>
+</table>
+<h2 class="bb_subsection"><a name="EUserReviewsReviewType"></a>EUserReviewsReviewType</h2>
+<table>
+    <tbody>
+        <tr>
+            <th>Name</th>
+            <th>Value</th>
+            <th>Description</th>
+        </tr>
+        <tr id="k_EUserReviewsReviewType_All">
+            <td><strong>k_EUserReviewsReviewType_All</strong></td>
+            <td>0</td>
+            <td>All reviews.</td>
+        </tr>
+        <tr id="k_EUserReviewsReviewType_Positive">
+            <td><strong>k_EUserReviewsReviewType_Positive</strong></td>
+            <td>1</td>
+            <td>Only positive reviews.</td>
+        </tr>
+        <tr id="k_EUserReviewsReviewType_Negative">
+            <td><strong>k_EUserReviewsReviewType_Negative</strong></td>
+            <td>2</td>
+            <td>Only negative reviews.</td>
+        </tr>
+    </tbody>
+</table>
+<h2 class="bb_subsection"><a name="EUserReviewsPurchaseType"></a>EUserReviewsPurchaseType</h2>
+<table>
+    <tbody>
+        <tr>
+            <th>Name</th>
+            <th>Value</th>
+            <th>Description</th>
+        </tr>
+        <tr id="k_EUserReviewsPurchaseType_Steam">
+            <td><strong>k_EUserReviewsPurchaseType_Steam</strong></td>
+            <td>0</td>
+            <td>Only reviews by users who purchased the app on Steam.</td>
+        </tr>
+        <tr id="k_EUserReviewsPurchaseType_All">
+            <td><strong>k_EUserReviewsPurchaseType_All</strong></td>
+            <td>1</td>
+            <td>All reviews.</td>
+        </tr>
+        <tr id="k_EUserReviewsPurchaseType_NonSteamPurchase">
+            <td><strong>k_EUserReviewsPurchaseType_NonSteamPurchase</strong></td>
+            <td>2</td>
+            <td>Only reviews by users who did not purchase the app on Steam.</td>
+        </tr>
+    </tbody>
+</table>

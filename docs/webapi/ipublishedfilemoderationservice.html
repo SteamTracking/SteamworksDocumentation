@@ -1,0 +1,216 @@
+<h1>IPublishedFileModerationService Interface</h1>
+Provides methods for moderating Steam Workshop items in apps that require approval before new
+content is published.<br />
+<br />
+See <a href="/doc/webapi/IPublishedFileService">IPublishedFileService</a> and
+<a href="/doc/webapi/ISteamRemoteStorage">ISteamRemoteStorage</a> for the primary Workshop
+interfaces.<br />
+<br />
+<strong>NOTE:</strong> This is a Service interface, methods in this interface should be called with
+the <code class="bb_code bb_code_inline nohighlight">input_json</code> parameter.<br />
+<br />
+For more info on how to use the Steamworks Web API please see the
+<a href="/doc/webapi_overview">Web API Overview</a>.
+<h2 class="bb_section"><a name="GetAllApprovalRequests"></a>GetAllApprovalRequests</h2>
+<div class="bb_code http">
+    GET https://partner.steam-api.com/IPublishedFileModerationService/GetAllApprovalRequests/v1/
+</div>
+<table>
+    <tbody>
+        <tr>
+            <th>Name</th>
+            <th>Type</th>
+            <th>Required</th>
+            <th>Description</th>
+        </tr>
+        <tr>
+            <td><strong>key</strong></td>
+            <td>string</td>
+            <td>✔</td>
+            <td>Steamworks Web API publisher authentication key.</td>
+        </tr>
+        <tr>
+            <td><strong>appid</strong></td>
+            <td>uint32</td>
+            <td>✔</td>
+            <td>App the items belong to</td>
+        </tr>
+        <tr>
+            <td><strong>revision</strong></td>
+            <td>
+                <a href="/doc/webapi/IPublishedFileModerationService#EPublishedFileRevision"
+                    >IPublishedFileModerationService#EPublishedFileRevision</a
+                >
+            </td>
+            <td></td>
+            <td>
+                (Optional) Return requests for the specified revision. Defaults to
+                <code class="bb_code bb_code_inline nohighlight"
+                    >k_EPublishedFileRevision_ApprovedSnapshot</code
+                >.
+            </td>
+        </tr>
+        <tr>
+            <td><strong>start</strong></td>
+            <td>uint32</td>
+            <td></td>
+            <td>(Optional) The start index of the query. Defaults to 0.</td>
+        </tr>
+        <tr>
+            <td><strong>count</strong></td>
+            <td>uint32</td>
+            <td></td>
+            <td>(Optional) Number of requests to return. Defaults to 100, maximum 1000.</td>
+        </tr>
+    </tbody>
+</table>
+<br />
+Gets all the pending approval requests for the given app, oldest first. Requests are returned
+whether or not they have been claimed by a moderator.<br />
+<br />
+Each request in the response contains:<br />
+<table>
+    <tbody>
+        <tr>
+            <th>Name</th>
+            <th>Type</th>
+            <th>Description</th>
+        </tr>
+        <tr>
+            <td><strong>publishedfileid</strong></td>
+            <td>uint64</td>
+            <td>Item awaiting approval</td>
+        </tr>
+        <tr>
+            <td><strong>revision</strong></td>
+            <td>
+                <a href="/doc/webapi/IPublishedFileModerationService#EPublishedFileRevision"
+                    >IPublishedFileModerationService#EPublishedFileRevision</a
+                >
+            </td>
+            <td>Revision the request is for</td>
+        </tr>
+        <tr>
+            <td><strong>timestamp_request</strong></td>
+            <td>uint32</td>
+            <td>Unix timestamp when approval was requested</td>
+        </tr>
+        <tr>
+            <td><strong>timestamp_claimed</strong></td>
+            <td>uint32</td>
+            <td>Unix timestamp when a moderator claimed the request, if claimed</td>
+        </tr>
+    </tbody>
+</table>
+<br />
+<strong>NOTE:</strong> This call requires a publisher API key to use this method. As such this API
+<strong>MUST</strong> be called from a secure server, and can never be used directly by clients!
+<h2 class="bb_section"><a name="ProcessApprovalRequest"></a>ProcessApprovalRequest</h2>
+<div class="bb_code http">
+    POST https://partner.steam-api.com/IPublishedFileModerationService/ProcessApprovalRequest/v1/
+</div>
+<table>
+    <tbody>
+        <tr>
+            <th>Name</th>
+            <th>Type</th>
+            <th>Required</th>
+            <th>Description</th>
+        </tr>
+        <tr>
+            <td><strong>key</strong></td>
+            <td>string</td>
+            <td>✔</td>
+            <td>Steamworks Web API publisher authentication key.</td>
+        </tr>
+        <tr>
+            <td><strong>publishedfileid</strong></td>
+            <td>uint64</td>
+            <td>✔</td>
+            <td>Item to approve or reject</td>
+        </tr>
+        <tr>
+            <td><strong>appid</strong></td>
+            <td>uint32</td>
+            <td>✔</td>
+            <td>App the item belongs to</td>
+        </tr>
+        <tr>
+            <td><strong>revision</strong></td>
+            <td>
+                <a href="/doc/webapi/IPublishedFileModerationService#EPublishedFileRevision"
+                    >IPublishedFileModerationService#EPublishedFileRevision</a
+                >
+            </td>
+            <td>✔</td>
+            <td>
+                Must be
+                <code class="bb_code bb_code_inline nohighlight"
+                    >k_EPublishedFileRevision_ApprovedSnapshot</code
+                >.
+            </td>
+        </tr>
+        <tr>
+            <td><strong>change_number</strong></td>
+            <td>uint64</td>
+            <td>✔</td>
+            <td>
+                Change number of the content being approved or rejected. Must match the item's
+                latest change number.
+            </td>
+        </tr>
+        <tr>
+            <td><strong>approved</strong></td>
+            <td>bool</td>
+            <td>✔</td>
+            <td>True to approve the content, false to reject it.</td>
+        </tr>
+    </tbody>
+</table>
+<br />
+Approves or rejects the latest content of an item that is awaiting moderation. Approved content
+becomes visible to users and is delivered to subscribers.<br />
+<br />
+The change number guards against approving content you have not reviewed: if the item has been
+updated since you fetched it, the call fails and you should review the new version. The current
+change number is returned as
+<code class="bb_code bb_code_inline nohighlight">revision_change_number</code> by
+<a href="/doc/webapi/IPublishedFileService#GetDetails">IPublishedFileService#GetDetails</a>.<br />
+<br />
+<strong>NOTE:</strong> This call requires a publisher API key to use this method. As such this API
+<strong>MUST</strong> be called from a secure server, and can never be used directly by clients!
+<h2 class="bb_section"><a name="enums"></a>Enums</h2>
+These are enums which are defined for use with IPublishedFileModerationService. Values not listed
+are for internal use only.
+<h2 class="bb_subsection"><a name="EPublishedFileRevision"></a>EPublishedFileRevision</h2>
+Revisions of a published file's content.<br />
+<br />
+<table>
+    <tbody>
+        <tr>
+            <th>Name</th>
+            <th>Value</th>
+            <th>Description</th>
+        </tr>
+        <tr id="k_EPublishedFileRevision_Default">
+            <td><strong>k_EPublishedFileRevision_Default</strong></td>
+            <td>0</td>
+            <td></td>
+        </tr>
+        <tr id="k_EPublishedFileRevision_Latest">
+            <td><strong>k_EPublishedFileRevision_Latest</strong></td>
+            <td>1</td>
+            <td>The most recent content, whether or not it has been approved.</td>
+        </tr>
+        <tr id="k_EPublishedFileRevision_ApprovedSnapshot">
+            <td><strong>k_EPublishedFileRevision_ApprovedSnapshot</strong></td>
+            <td>2</td>
+            <td>The most recently approved content.</td>
+        </tr>
+        <tr id="k_EPublishedFileRevision_RejectedSnapshot">
+            <td><strong>k_EPublishedFileRevision_RejectedSnapshot</strong></td>
+            <td>4</td>
+            <td>The most recently rejected content.</td>
+        </tr>
+    </tbody>
+</table>
