@@ -441,20 +441,18 @@ This method returns an
 <br />
 By default, this method will return a value corresponding to the device type returned by
 <a href="/doc/api/ISteamUtils#IsRunningOnSteamHardware">ISteamUtils::IsRunningOnSteamHardware</a>,
-such<br />
-as returning
+such as returning
 <code class="bb_code bb_code_inline nohighlight">k_ESteamHardwareDefaultConfigSteamDeck</code> when
-running on a Steam Deck. It may also return a configuration value for 3rd party<br />
-hardware that has similar performance characteristics to Steam hardware, such as returning
-<code class="bb_code bb_code_inline nohighlight">k_ESteamHardwareDefaultConfigSteamDeck</code>
-when<br />
-running on 3rd part handheld gaming devices running SteamOS.<br />
+running on a Steam Deck. It may also return a configuration value for 3rd party hardware that has
+similar performance characteristics to Steam hardware, such as returning
+<code class="bb_code bb_code_inline nohighlight">k_ESteamHardwareDefaultConfigSteamDeck</code> when
+running on 3rd party handheld gaming devices running SteamOS.<br />
 <br />
 You can also change what value the Steam Client returns per device through the Steamworks Partner
-Site. This allows you to customize the<br />
-default configuration used on future Steam hardware without recompiling your game. For example, if
-your game runs well on Steam Machine using your 'high' user preset, but was released before that
-device became available, you could configure this method to return
+Site. This allows you to customize the default configuration used on future Steam hardware without
+recompiling your game. For example, if your game runs well on Steam Machine using your 'high' user
+preset, but was released before that device became available, you could configure this method to
+return
 <code class="bb_code bb_code_inline nohighlight">k_ESteamHardwareDefaultConfigHigh</code> when run
 on those devices. Similarly if your game was released before Steam Frame, you could configure this
 method to return
