@@ -41,6 +41,59 @@ Deprecated.<br />
 <br />
 <strong>Returns:</strong> <a href="/doc/api/steam_api#SteamAPICall_t">SteamAPICall_t</a> to be used
 with a <a href="/doc/api/ISteamUtils#CheckFileSignature_t">CheckFileSignature_t</a> call result.
+<h2 class="bb_subsection"><a name="FilterText"></a>FilterText</h2>
+<div class="bb_code cpp">
+    int FilterText( ETextFilteringContext eContext, CSteamID sourceSteamID, const char
+    *pchInputMessage, char *pchOutFilteredText, uint32 nByteSizeOutFilteredText );
+</div>
+<table>
+    <tbody>
+        <tr>
+            <th>Name</th>
+            <th>Type</th>
+            <th>Description</th>
+        </tr>
+        <tr>
+            <td><strong>eContext</strong></td>
+            <td><a href="/doc/api/steam_api#ETextFilteringContext">ETextFilteringContext</a></td>
+            <td>the type of content in the input string</td>
+        </tr>
+        <tr>
+            <td><strong>sourceSteamID</strong></td>
+            <td><a href="/doc/api/steam_api#CSteamID">CSteamID</a></td>
+            <td>
+                the Steam ID that is the source of the input string (e.g. the player with the name,
+                or who said the chat text)
+            </td>
+        </tr>
+        <tr>
+            <td><strong>pchInputText</strong></td>
+            <td>const char*</td>
+            <td>the input string that should be filtered, which can be ASCII or UTF-8</td>
+        </tr>
+        <tr>
+            <td><strong>pchOutFilteredText</strong></td>
+            <td>char*</td>
+            <td>where the output will be placed, even if no filtering is performed</td>
+        </tr>
+        <tr>
+            <td><strong>nByteSizeOutFilteredText </strong></td>
+            <td>uint32</td>
+            <td>
+                the size (in bytes) of pchOutFilteredText, should be at least strlen(pchInputText)+1
+            </td>
+        </tr>
+    </tbody>
+</table>
+Filters the provided input message and places the filtered result into pchOutFilteredText. Legally
+required filtering is always applied. Additional filtering may occur, based on the context and user
+settings.<br />
+<br />
+<strong>Returns:</strong> int<br />
+Returns the number of characters (not bytes) filtered.<br />
+<br />
+<strong>See Also:</strong>
+<a href="/doc/api/ISteamUtils#InitFilterText">ISteamUtils::InitFilterText</a>
 <h2 class="bb_subsection"><a name="GetAPICallFailureReason"></a>GetAPICallFailureReason</h2>
 <div class="bb_code cpp">
     ESteamAPICallFailure GetAPICallFailureReason( SteamAPICall_t hSteamAPICall );
@@ -501,6 +554,25 @@ For a full list of languages see
 <strong>See Also:</strong>
 <a href="/doc/api/ISteamApps#GetCurrentGameLanguage">ISteamApps::GetCurrentGameLanguage</a>,
 <a href="/doc/api/ISteamApps#GetAvailableGameLanguages">ISteamApps::GetAvailableGameLanguages</a>
+<h2 class="bb_subsection"><a name="InitFilterText"></a>InitFilterText</h2>
+<div class="bb_code cpp">bool InitFilterText();</div>
+Initializes text filtering, loading dictionaries for the language the game is running in.<br />
+<br />
+Users can customize the text filter behavior in their
+<a
+    href="https://store.steampowered.com/account/preferences#CommunityContentPreferences"
+    target="_blank"
+    rel="noreferrer"
+    >Steam Account preferences</a
+><br />
+<br />
+<strong>Returns:</strong> bool<br />
+<strong>true</strong> if initialization succeeds, <strong>false</strong> if filtering is unavailable
+for the game's language, in which case
+<a href="/doc/api/ISteamUtils#FilterText">ISteamUtils::FilterText</a>() will act as a
+passthrough.<br />
+<br />
+<strong>See Also:</strong> <a href="/doc/api/ISteamUtils#FilterText">ISteamUtils::FilterText</a>
 <h2 class="bb_subsection"><a name="IsAPICallCompleted"></a>IsAPICallCompleted</h2>
 <div class="bb_code cpp">
     bool IsAPICallCompleted( SteamAPICall_t hSteamAPICall, bool *pbFailed );
@@ -548,82 +620,6 @@ The overlay process could take a few seconds to start &amp; hook the game proces
 will initially return false while the overlay is loading.<br />
 <br />
 <strong>Returns:</strong> bool
-<h2 class="bb_subsection"><a name="IsSteamChinaLauncher"></a>IsSteamChinaLauncher</h2>
-<div class="bb_code cpp">bool IsSteamChinaLauncher();</div>
-Returns whether the current launcher is a Steam China launcher. You can cause the client to behave
-as the Steam China launcher by adding -dev -steamchina to the command line when running Steam.
-<h2 class="bb_subsection"><a name="InitFilterText"></a>InitFilterText</h2>
-<div class="bb_code cpp">bool InitFilterText();</div>
-Initializes text filtering, loading dictionaries for the language the game is running in.<br />
-<br />
-Users can customize the text filter behavior in their
-<a
-    href="https://store.steampowered.com/account/preferences#CommunityContentPreferences"
-    target="_blank"
-    rel="noreferrer"
-    >Steam Account preferences</a
-><br />
-<br />
-<strong>Returns:</strong> bool<br />
-<strong>true</strong> if initialization succeeds, <strong>false</strong> if filtering is unavailable
-for the game's language, in which case
-<a href="/doc/api/ISteamUtils#FilterText">ISteamUtils::FilterText</a>() will act as a
-passthrough.<br />
-<br />
-<strong>See Also:</strong> <a href="/doc/api/ISteamUtils#FilterText">ISteamUtils::FilterText</a>
-<h2 class="bb_subsection"><a name="FilterText"></a>FilterText</h2>
-<div class="bb_code cpp">
-    int FilterText( ETextFilteringContext eContext, CSteamID sourceSteamID, const char
-    *pchInputMessage, char *pchOutFilteredText, uint32 nByteSizeOutFilteredText );
-</div>
-<table>
-    <tbody>
-        <tr>
-            <th>Name</th>
-            <th>Type</th>
-            <th>Description</th>
-        </tr>
-        <tr>
-            <td><strong>eContext</strong></td>
-            <td><a href="/doc/api/steam_api#ETextFilteringContext">ETextFilteringContext</a></td>
-            <td>the type of content in the input string</td>
-        </tr>
-        <tr>
-            <td><strong>sourceSteamID</strong></td>
-            <td><a href="/doc/api/steam_api#CSteamID">CSteamID</a></td>
-            <td>
-                the Steam ID that is the source of the input string (e.g. the player with the name,
-                or who said the chat text)
-            </td>
-        </tr>
-        <tr>
-            <td><strong>pchInputText</strong></td>
-            <td>const char*</td>
-            <td>the input string that should be filtered, which can be ASCII or UTF-8</td>
-        </tr>
-        <tr>
-            <td><strong>pchOutFilteredText</strong></td>
-            <td>char*</td>
-            <td>where the output will be placed, even if no filtering is performed</td>
-        </tr>
-        <tr>
-            <td><strong>nByteSizeOutFilteredText </strong></td>
-            <td>uint32</td>
-            <td>
-                the size (in bytes) of pchOutFilteredText, should be at least strlen(pchInputText)+1
-            </td>
-        </tr>
-    </tbody>
-</table>
-Filters the provided input message and places the filtered result into pchOutFilteredText. Legally
-required filtering is always applied. Additional filtering may occur, based on the context and user
-settings.<br />
-<br />
-<strong>Returns:</strong> int<br />
-Returns the number of characters (not bytes) filtered.<br />
-<br />
-<strong>See Also:</strong>
-<a href="/doc/api/ISteamUtils#InitFilterText">ISteamUtils::InitFilterText</a>
 <h2 class="bb_subsection"><a name="IsRunningOnSteamHardware"></a>IsRunningOnSteamHardware</h2>
 <div class="bb_code cpp">ESteamHardwareType IsRunningOnSteamHardware();</div>
 Returns an
@@ -638,6 +634,10 @@ indicating whether the current game is running on Steam hardware and, if so, whi
 <strong>Returns:</strong> bool<br />
 Returns <strong>true</strong> if the current app is running under the Proton compatibility layer and
 <strong>false</strong> otherwise.
+<h2 class="bb_subsection"><a name="IsSteamChinaLauncher"></a>IsSteamChinaLauncher</h2>
+<div class="bb_code cpp">bool IsSteamChinaLauncher();</div>
+Returns whether the current launcher is a Steam China launcher. You can cause the client to behave
+as the Steam China launcher by adding -dev -steamchina to the command line when running Steam.
 <h2 class="bb_subsection"><a name="IsSteamInBigPictureMode"></a>IsSteamInBigPictureMode</h2>
 <div class="bb_code cpp">bool IsSteamInBigPictureMode();</div>
 Checks if Steam &amp; the Steam Overlay are running in Big Picture mode.<br />
@@ -657,6 +657,13 @@ Checks if Steam is running in VR mode.<br />
 <br />
 <strong>Returns:</strong> bool<br />
 <strong>true</strong> if Steam itself is running in VR mode; otherwise, <strong>false</strong>.
+<h2 class="bb_subsection"><a name="IsSteamRunningOnSteamDeck"></a>IsSteamRunningOnSteamDeck</h2>
+<div class="bb_code cpp">bool IsSteamRunningOnSteamDeck();</div>
+Deprecated as of Steamworks SDK 1.65.<br />
+<br />
+<strong>Returns:</strong> bool<br />
+<strong>true</strong> if Steam itself is running on a Steam Deck device; otherwise,
+<strong>false</strong>.
 <h2 class="bb_subsection"><a name="IsVRHeadsetStreamingEnabled"></a>IsVRHeadsetStreamingEnabled</h2>
 <div class="bb_code cpp">bool IsVRHeadsetStreamingEnabled();</div>
 Checks if the HMD view is being streamed via Steam Remote Play.<br />
@@ -669,13 +676,24 @@ Checks if the HMD view is being streamed via Steam Remote Play.<br />
 <a href="/doc/api/ISteamUtils#SetVRHeadsetStreamingEnabled"
     >ISteamUtils::SetVRHeadsetStreamingEnabled</a
 >
-<h2 class="bb_subsection"><a name="IsSteamRunningOnSteamDeck"></a>IsSteamRunningOnSteamDeck</h2>
-<div class="bb_code cpp">bool IsSteamRunningOnSteamDeck();</div>
-Deprecated as of Steamworks SDK 1.65.<br />
-<br />
-<strong>Returns:</strong> bool<br />
-<strong>true</strong> if Steam itself is running on a Steam Deck device; otherwise,
-<strong>false</strong>.
+<h2 class="bb_subsection"><a name="SetGameLauncherMode"></a>SetGameLauncherMode</h2>
+<div class="bb_code cpp">void SetGameLauncherMode( bool bLauncherMode);</div>
+<table>
+    <tbody>
+        <tr>
+            <th>Name</th>
+            <th>Type</th>
+            <th>Description</th>
+        </tr>
+        <tr>
+            <td><strong>bLauncherMode</strong></td>
+            <td>bool</td>
+            <td>Whether a launcher is active or not</td>
+        </tr>
+    </tbody>
+</table>
+In game launchers that don't have controller support you can call this to have Steam Input translate
+the controller input into mouse/kb to navigate the launcher
 <h2 class="bb_subsection"><a name="SetOverlayNotificationInset"></a>SetOverlayNotificationInset</h2>
 <div class="bb_code cpp">
     void SetOverlayNotificationInset( int nHorizontalInset, int nVerticalInset );
@@ -927,24 +945,6 @@ position the floating keyboard in a way that doesn't cover the text field.<br />
 <h2 class="bb_subsection"><a name="StartVRDashboard"></a>StartVRDashboard</h2>
 <div class="bb_code cpp">void StartVRDashboard();</div>
 Asks Steam to create and render the OpenVR dashboard.
-<h2 class="bb_subsection"><a name="SetGameLauncherMode"></a>SetGameLauncherMode</h2>
-<div class="bb_code cpp">void SetGameLauncherMode( bool bLauncherMode);</div>
-<table>
-    <tbody>
-        <tr>
-            <th>Name</th>
-            <th>Type</th>
-            <th>Description</th>
-        </tr>
-        <tr>
-            <td><strong>bLauncherMode</strong></td>
-            <td>bool</td>
-            <td>Whether a launcher is active or not</td>
-        </tr>
-    </tbody>
-</table>
-In game launchers that don't have controller support you can call this to have Steam Input translate
-the controller input into mouse/kb to navigate the launcher
 <h2 class="bb_section"><a name="callbacks"></a>Callbacks</h2>
 These are callbacks which can be fired by calling
 <a href="/doc/api/steam_api#SteamAPI_RunCallbacks">SteamAPI_RunCallbacks</a>. Many of these will be

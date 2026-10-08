@@ -458,14 +458,16 @@ its' content that branch.<br />
 <div class="bb_code cpp">const char * GetCurrentGameLanguage();</div>
 Gets the current language that the user has set.<br />
 <br />
-This falls back to the Steam UI language if the user hasn't explicitly picked a language for the
-title.<br />
+Always returns one of the languages returned by
+<a href="/doc/api/ISteamApps#GetAvailableGameLanguages">ISteamApps::GetAvailableGameLanguages</a>.
+If the user hasn't explicitly picked a language for the title, returns the first supported language
+in this order: The Steam UI language, a related regional variant of the Steam UI language, English,
+the first supported language.<br />
 <br />
 For the full list of languages see
 <a href="/doc/store/localization/languages">Supported Languages</a>.<br />
 <br />
 <strong>Returns:</strong> const char *<br />
-<br />
 <br />
 <strong>See Also:</strong>
 <a href="/doc/api/ISteamApps#GetAvailableGameLanguages">ISteamApps::GetAvailableGameLanguages</a>,
