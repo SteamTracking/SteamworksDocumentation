@@ -7,17 +7,19 @@ Before getting started you should be familiar with all of the concepts outlined 
 <a href="/doc/store/application">Applications</a> documentation.
 <h2 class="bb_section"><a name="internal"></a>Internal Testing Options</h2>
 You will obviously need to test your application yourself before release and you may have other
-employees that you wish to grant access to help test. The best way to enable these employees to test
-is by adding them to your Steamworks account. By default, the first user created in a Steamworks
-account is granted administrative permissions and access to the default application being worked on.
-That user can then add more users to help develop and test the application. You can read more about
-adding new users in
-<a href="/doc/gettingstarted/managing_users">Managing Your Steamworks Account</a>.<br />
-<br />
-Additionally, you can request keys for a package that will grant immediate access to your
-application. To learn more about the different types of packages and requesting keys, please see
-<a href="/doc/store/application/packages">Packages</a>.
-<h2 class="bb_subsection"><a name="1"></a>Dev Comp Packages - Important Configuration Note</h2>
+employees that you wish to grant access to help test. Here are some options for testing with your
+internal dev team.
+<h2 class="bb_subsection"><a name="1"></a>Option 1: Add employees to your Steamworks account</h2>
+The best way to enable these employees to test is by adding them to your Steamworks account. By
+default, the first user created in a Steamworks account is granted administrative permissions and
+access to the default application being worked on. That user can then add more users to help develop
+and test the application. You can read more about adding new users in
+<a href="/doc/gettingstarted/managing_users">Managing Your Steamworks Account</a>.
+<h2 class="bb_subsection"><a name="2"></a>Option 2: Request keys</h2>
+Additionally, you can request keys for a package called "Dev Comp" that will grant immediate access
+to your application. To learn more about the different types of packages and requesting keys, please
+see <a href="/doc/store/application/packages">Packages</a>.
+<h2 class="bb_subsection"><a name="3"></a>Dev Comp Packages - Important Configuration Note</h2>
 As a Steamworks developer, you have a special type of packages attached to your publisher group.
 This package is called a Dev Comp Package, and it controls what appIDs and depotIDs your developer
 accounts will own automatically when logging into Steam. Just because you have added a new depot to
@@ -52,7 +54,7 @@ There are two common ways of setting up testing for external audiences:<br />
     <li>Using the Steam Playtest feature.<br /></li>
     <li>Using the main game's App ID with release override keys.</li>
 </ol>
-<h2 class="bb_subsection"><a name="2"></a>Steam Playtest</h2>
+<h2 class="bb_subsection"><a name="4"></a>Steam Playtest</h2>
 <a href="/doc/features/playtest">Steam Playtest</a> is a free, low-risk solution to gathering
 playtest data without the stress of managing email lists and Steam keys or worrying about user
 reviews, or wishlists. By using a specific associated appID that is linked with, but separate from
@@ -68,7 +70,7 @@ playtest but still Wishlist or Follow the main game.<br />
 <br />
 Check out the <a href="/doc/features/playtest">Steam Playtest</a> documentation for the full set-up
 instructions, configuration scenarios, best practices and FAQs.
-<h2 class="bb_subsection"><a name="3"></a>Release Override Keys</h2>
+<h2 class="bb_subsection"><a name="5"></a>Release Override Keys</h2>
 While Steam Playtest is the preferred method of enabling closed betas on Steam, release override
 keys are available if you want to manage your playtest off your main game's App ID and have things
 like NDAs in place. We recommend the following process for this sort of closed beta.<br />
@@ -118,7 +120,7 @@ a Dev Comp package that you own (or acquired with a Key) in order to test. Some 
 and others are just used as a license check by the game to determine features to unlock. You can
 toggle the ownership (license) on and off using the Steam Console (launch Steam.exe -console), and
 then using the command <code class="bb_code bb_code_inline nohighlight">enable_license</code>
-<h2 class="bb_section"><a name="4"></a>Adding Friends to Test</h2>
+<h2 class="bb_section"><a name="6"></a>Adding Friends to Test</h2>
 If you need to add brand-new Steam accounts to your friends list in order to test multiplayer
 functionality in your game, you will need to take an extra step.<br />
 <br />

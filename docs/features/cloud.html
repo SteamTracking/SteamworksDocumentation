@@ -95,16 +95,24 @@ control platform sync via
 The default for a new file is to sync to <strong>all</strong> platforms.<br />
 <br />
 If you plan to use <a href="#steam_auto-cloud">Steam Auto-Cloud</a>, there are some key things to
-know. First, the default for new files is to sync to <strong>only</strong> the
-<code class="bb_code bb_code_inline nohighlight">OS</code> setting on the associated Auto Cloud Root
-path. This means that if you set up distinct roots for each OS, all files will be partitioned by
-platform, and hence there will be no cross-platform save functionality.<br />
+know. When creating new Root paths, the default
+<code class="bb_code bb_code_inline nohighlight">OS Restriction</code> setting is
+<code class="bb_code bb_code_inline nohighlight">[Cross-Platform]</code>. We strongly recommend you
+use this setting, even if your game currently only supports one platform. If you instead choose a
+specific OS, files uploaded using that rule will be "locked" to the given OS, and will not properly
+sync down to other platforms in the future if you try to add cross-platform support.<br />
 <br />
-To enable cross-platform saves, you should instead define a single Root path (likely for Windows),
-and then create <code class="bb_code bb_code_inline nohighlight">Root Overrides</code> for the other
-supported platforms. Files matching a given Root path which also has platform Root Overrides will
-sync to all platforms in both the original Root and all Overrides. See the
-<a href="#steam_auto-cloud">Steam Auto-Cloud</a> documentation for more details.
+If your game already supports cross-platform saves, or at the time when you begin adding support for
+this, you will then need to define
+<code class="bb_code bb_code_inline nohighlight">Root Overrides</code> for the other supported
+platforms. Files matching a given Root path which also has platform Root Overrides will sync to all
+platforms in both the original Root and all Overrides. See the
+<a href="#steam_auto-cloud">Steam Auto-Cloud</a> documentation for more details.<br />
+<br />
+You should only specify an <code class="bb_code bb_code_inline nohighlight">OS Restriction</code> if
+your game does not and will not support cross-platform saves. We recommend doing everything you can
+to avoid this condition, however, as it means a customer with devices across multiple platforms will
+never have their progress saved across those devices.
 <h2 class="bb_section"><a name="initial-setup"></a>Initial Setup</h2>
 To set up Steam Cloud you must set the
 <code class="bb_code bb_code_inline nohighlight">Byte quota per user</code> and
@@ -296,9 +304,10 @@ A Root Path is composed of 5 parts:<br />
         Example: <code class="bb_code bb_code_inline nohighlight">*.sav</code><br />
     </li>
     <li>
-        <h4>OS</h4>
+        <h4>OS Restriction</h4>
         Sets the Operating Systems that these files will be synced from/to. This is only required if
-        the files are OS specific, which is hopefully not the case!<br />
+        the files are OS specific, which is hopefully not the case! Otherwise, leave it at the
+        default of <code class="bb_code bb_code_inline nohighlight">Cross-Platform</code><br />
     </li>
     <li>
         <h4>Recursive</h4>
@@ -313,7 +322,9 @@ If your application is cross-platform and requires different directories for eac
 the Root Overrides functionality to specify an override for the Root Paths that you set above.<br />
 <br />
 The root paths specified above can be overridden to correspond to a different path on another OS. If
-you use Root Overrides, you must specify [All OSes] in the Root OS drop-down above.<br />
+you use Root Overrides, you must specify
+<code class="bb_code bb_code_inline nohighlight">[Cross-Platform]</code> in the Root OS drop-down
+above.<br />
 <br />
 A Root Override consists of 5 parts.<br />
 <ol>
