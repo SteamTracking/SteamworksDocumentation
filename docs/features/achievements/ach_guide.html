@@ -18,7 +18,16 @@ Achievements can be used as a way to encourage and reward player interactions an
 your game. They are often used for marking number of kills, miles driven, chests opened or other
 common actions within your game. And they can also be used to help your players discover different
 ways of playing your game. When unlocked, these achievements will pop up in the corner of the
-players' window and will be marked within an achievement page for that player.
+players' window and will be marked within an achievement page for that player.<br />
+<br />
+As your game grows, you can organize its achievements into <strong>Achievement Sets</strong>. Sets
+let you group achievements in ways that make sense for your game, add achievements for DLC without
+affecting completion of the base game, and retire achievements for content that has been removed
+without taking them away from players who earned them. See <strong>Achievement Sets</strong> below
+for details.<br />
+<br />
+<strong>Note:</strong> Achievement Sets are currently in beta. We'll continue making improvements
+during the beta, and this documentation will be updated as things change.
 <h2 class="bb_section"><a name="2"></a>Technical Overview</h2>
 The following is a quick step by step guide to integrating very basic Steam Achievements into your
 application in under 10 minutes and under 10 lines of code integrated into your code base. The
@@ -28,7 +37,10 @@ should be your first stop to see all Steam features in action. This tutorial dis
 information found in Spacewar and the Stats and Achievements API down to just the necessary
 information required for Steam Stats to keep things as straightforward as possible. Please note that
 there is a considerable amount of overlap between stats and achievements, as such if you are
-integrating both be aware that a lot of calls can be consolidated.
+integrating both be aware that a lot of calls can be consolidated.<br />
+<br />
+Achievement Sets are configured entirely in Steamworks. They don't require any additional code, and
+your game unlocks achievements in a set using the same API names and calls described in this guide.
 <h2 class="bb_section"><a name="3"></a>Step 1 - Defining your game's Achievements</h2>
 Achievements are application specific and are setup on the
 <a href="/apps/achievements/" target="_blank" rel="noreferrer">Achievement Configuration</a> page in
@@ -40,12 +52,153 @@ sample app Spacewar:<br />
     alt="spacewar_achievement_examplescreenshot.jpg"
     title="spacewar_achievement_examplescreenshot.jpg"
 />
-<h2 class="bb_section"><a name="4"></a>Step 2 - Encapsulating Achievements work</h2>
+<h2 class="bb_subsection"><a name="4"></a>Accessing the Achievements Editor</h2>
+Achievements are created and managed in the achievements editor:<br />
+<ol>
+    <li>
+        From your app's landing page in Steamworks, select
+        <strong>Edit Steamworks Settings</strong>.<br />
+    </li>
+    <li>Select <strong>Stats &amp; Achievements &gt; Achievements</strong>.<br /></li>
+    <li>Click the banner at the top of the page to open the new achievements editor.</li>
+</ol>
+<br />
+You need permission to edit the app's info in order to use the achievements editor.<br />
+<br />
+The editor has two tabs:<br />
+<ul>
+    <li>
+        <strong>Manage Achievements</strong> - Create, edit, and organize your sets and
+        achievements.<br />
+    </li>
+    <li>
+        <strong>Bulk Import/Export</strong> - Export and import your achievements as CSV files, and
+        upload icons in bulk. See <strong>Bulk Import/Export</strong> below.
+    </li>
+</ul>
+<br />
+The top of the editor shows how many achievements and sets your game is using out of your limits,
+and links to preview your achievements on your own achievements page.
+<h2 class="bb_subsection"><a name="5"></a>Creating and Editing Achievements</h2>
+All of your achievements belong to the <strong>Base game achievements</strong> set unless you assign
+them to another set. To create an achievement, click <strong>Create Achievement</strong> in the set
+it should belong to. To edit an achievement, select it in the achievements table.<br />
+<br />
+<table>
+    <tbody>
+        <tr>
+            <th>Field</th>
+            <th>Description</th>
+        </tr>
+        <tr>
+            <td><strong>API Name</strong></td>
+            <td>
+                A unique name your game passes to the Steamworks API, such as
+                <code class="bb_code bb_code_inline nohighlight">ACH_WIN_ONE_GAME</code>. Required.
+            </td>
+        </tr>
+        <tr>
+            <td><strong>Display Name</strong></td>
+            <td>The name of the achievement shown to players. Localizable.</td>
+        </tr>
+        <tr>
+            <td><strong>Description</strong></td>
+            <td>The description of the achievement shown to players. Localizable.</td>
+        </tr>
+        <tr>
+            <td><strong>Icons</strong></td>
+            <td>
+                The <strong>Achieved icon</strong> and <strong>Unachieved icon</strong>. See
+                <strong>Icons</strong> below.
+            </td>
+        </tr>
+        <tr>
+            <td><strong>Set By</strong></td>
+            <td>
+                Who can unlock the achievement: the client, a game server, or an official game
+                server.
+            </td>
+        </tr>
+        <tr>
+            <td><strong>Progress Stat</strong></td>
+            <td>
+                Optionally, a stat used to display progress toward this achievement, along with the
+                <strong>Stat Range</strong> that maps to 0% and 100% progress.
+            </td>
+        </tr>
+        <tr>
+            <td><strong>Visibility</strong></td>
+            <td>
+                <strong>Visible</strong>, or <strong>Spoiler</strong> to hide the achievement's
+                details until it's unlocked.
+            </td>
+        </tr>
+        <tr>
+            <td><strong>Optional Status</strong></td>
+            <td>
+                <strong>Available</strong>, or <strong>Archived</strong> if the achievement can no
+                longer be earned.
+            </td>
+        </tr>
+        <tr>
+            <td><strong>In Set</strong></td>
+            <td>The set this achievement belongs to.</td>
+        </tr>
+    </tbody>
+</table>
+<br />
+The achievements table also shows each achievement's ID, its set, how it's set, and its global
+unlock rate. Use the <strong>Filter</strong> box in the toolbar to find achievements by name,
+description, or API name.<br />
+<br />
+Deleting an achievement removes it for everyone, including players who have already unlocked it. If
+an achievement has been earned by players, the editor will recommend archiving it instead. See
+<strong>Archiving</strong> below.
+<h2 class="bb_subsection"><a name="6"></a>Icons</h2>
+For best results, achievement icons should be 256x256 pixel PNG images. They can be as small as
+64x64, but we recommend using the larger size. Icons must be square, and larger icons are scaled
+down to 256x256. JPG images are also accepted.<br />
+<br />
+We recommend making achieved icons colorful and unachieved icons grayscale. You don't need to create
+an unachieved icon yourself: click <strong>Generate</strong> in the achievement editor, or use the
+<strong>Automatically generate unachieved icons</strong> option when uploading in bulk, to create a
+grayscale unachieved icon from the achieved icon. You can replace the generated icon with your own
+at any time.
+<h2 class="bb_subsection"><a name="7"></a>Localization</h2>
+Use the <strong>Language</strong> selector in the toolbar to view and edit your achievements in each
+of your game's languages. A warning icon is shown in the toolbar when some languages are missing
+localized text, and each achievement or set that's missing text is marked in the editor.<br />
+<br />
+To choose which languages your achievements support, click the edit button next to
+<strong>Language</strong> in the toolbar, or click <strong>Configure Languages</strong> on the
+<strong>Bulk Import/Export</strong> tab. These languages are used in the editor and in the
+localization CSV files. When you query achievements through the API, Steam returns the text for the
+requested language.
+<h2 class="bb_subsection"><a name="8"></a>Limits</h2>
+<table>
+    <tbody>
+        <tr>
+            <th>Item</th>
+            <th>Limit</th>
+        </tr>
+        <tr>
+            <td>Achievements per app</td>
+            <td>5,000 (100 for apps that have not yet been vetted)</td>
+        </tr>
+        <tr>
+            <td>Sets per app</td>
+            <td>40, including the base game set</td>
+        </tr>
+    </tbody>
+</table>
+<br />
+Archived achievements count toward the achievement limit.
+<h2 class="bb_section"><a name="9"></a>Step 2 - Encapsulating Achievements work</h2>
 The following code is game independent and can be added to your game as you see fit. The class is
 fully functional as is but can be easily extended to meet any further needs. All of this code was
 taken directly from the Spacewar example files
 <code class="bb_code bb_code_inline nohighlight">StatsAndAchievements.cpp/h</code>.
-<h2 class="bb_subsection"><a name="5"></a>Header File</h2>
+<h2 class="bb_subsection"><a name="10"></a>Header File</h2>
 We first define a structure to hold our achievement data received from Steam and provide a macro for
 creating objects of that type. This data maps directly to what is found on the
 <a href="/apps/achievements/" target="_blank" rel="noreferrer">Achievement Configuration</a>
@@ -67,7 +220,7 @@ all of the <a href="/doc/sdk/api#callbacks">Steam callbacks</a>.<br />
     UserStatsStored_t, m_CallbackUserStatsStored ); STEAM_CALLBACK( CSteamAchievements,
     OnAchievementStored, UserAchievementStored_t, m_CallbackAchievementStored ); };
 </div>
-<h2 class="bb_subsection"><a name="6"></a>Code File</h2>
+<h2 class="bb_subsection"><a name="11"></a>Code File</h2>
 <h4>Constructor</h4>
 <strong>Parameters</strong> - The constructor takes a pointer to an array of achievements along with
 the length of the array. The formating of that array will be covered in the main game code later.<br />
@@ -99,7 +252,7 @@ in.<br />
     we can't access stats. if ( !SteamUser()-&gt;BLoggedOn() ) { return false; } return true; }
 </div>
 <h4>SetAchievement()</h4>
-<strong>Parameters</strong> - The string identifier of the Achievement that you want to set (ie.
+<strong>Parameters</strong> - The string identifier of the Achievement that you want to set (e.g.
 "ACH_WIN_ONE_GAME")<br />
 <strong>Returns</strong> - a bool representing if the call succeeded or not. If the call failed then
 Steam is not initialized.<br />
@@ -136,10 +289,10 @@ successfully stored on Steam.<br />
     get callbacks for other games' stats arriving, ignore them if ( m_iAppID ==
     pCallback-&gt;m_nGameID ) { OutputDebugString( "Stored Achievement for Steam\n" ); } }
 </div>
-<h2 class="bb_section"><a name="7"></a>Step 3 - Integrating into your game</h2>
+<h2 class="bb_section"><a name="12"></a>Step 3 - Integrating into your game</h2>
 The following is a complete listing of code snippets that you would need to integrate into your game
 in the appropriate locations.
-<h2 class="bb_subsection"><a name="8"></a>Defines and Globals</h2>
+<h2 class="bb_subsection"><a name="13"></a>Defines and Globals</h2>
 The following is the list of includes that are needed to build with Achievements, an enum of our
 game specific achievements and a global pointer to our helper object. Please note that the
 achievements match those of the Admin page on Steamworks.<br />
@@ -151,7 +304,7 @@ achievements match those of the Admin page on Steamworks.<br />
     ACH_TRAVEL_FAR_ACCUM, "Interstellar" ), _ACH_ID( ACH_TRAVEL_FAR_SINGLE, "Orbiter" ), }; //
     Global access to Achievements object CSteamAchievements* g_SteamAchievements = NULL; ...
 </div>
-<h2 class="bb_subsection"><a name="9"></a>Initialization</h2>
+<h2 class="bb_subsection"><a name="14"></a>Initialization</h2>
 The call to <a href="/doc/api/steam_api#SteamAPI_Init">SteamAPI_Init</a> initializes all of Steam
 and must be called before anything else. If that call succeeds then we create the helper object by
 passing in the array of achievements along with the size of the array.<br />
@@ -160,16 +313,21 @@ passing in the array of achievements along with the size of the array.<br />
     Steam was successfully initialized if (bRet) { g_SteamAchievements = new
     CSteamAchievements(g_Achievements, 4); } ...
 </div>
-<h2 class="bb_subsection"><a name="10"></a>Processing Callbacks</h2>
+<h2 class="bb_subsection"><a name="15"></a>Processing Callbacks</h2>
 To ensure that we process all Steam callbacks we need to regularly pump for new messages. This is
 achieved by adding this call to the game loop.<br />
 <div class="bb_code cpp">... SteamAPI_RunCallbacks(); ...</div>
-<h2 class="bb_subsection"><a name="11"></a>Triggering Achievements</h2>
+<h2 class="bb_subsection"><a name="16"></a>Triggering Achievements</h2>
 Triggering an achievement is as simple as a single call passing along the achievement identifier.<br />
 <div class="bb_code cpp">
     ... if (g_SteamAchievements) g_SteamAchievements-&gt;SetAchievement("ACH_WIN_100_GAMES"); ...
 </div>
-<h2 class="bb_subsection"><a name="12"></a>Shutdown</h2>
+<br />
+<strong>Note:</strong> Steam will not unlock an achievement in a DLC set for a player who can't play
+that DLC, or an achievement in an archived set. Make sure your game only awards DLC achievements to
+players who own the DLC, and stops awarding achievements once you archive them. See
+<strong>Achievement Sets</strong> below.
+<h2 class="bb_subsection"><a name="17"></a>Shutdown</h2>
 The call to <a href="/doc/api/steam_api#SteamAPI_Shutdown">SteamAPI_Shutdown</a> is probably
 something you already have in your code. It shuts down Steam and must be called before your
 application exits. Finally we delete the helper object we created.<br />
@@ -177,7 +335,7 @@ application exits. Finally we delete the helper object we created.<br />
     ... // Shutdown Steam SteamAPI_Shutdown(); // Delete the SteamAchievements object if
     (g_SteamAchievements) delete g_SteamAchievements; ...
 </div>
-<h2 class="bb_section"><a name="13"></a>Step 4 - Testing and Troubleshooting</h2>
+<h2 class="bb_section"><a name="18"></a>Step 4 - Testing and Troubleshooting</h2>
 <br />
 To set or clear stats or an achievement without adding code to your game, you can use the Steam
 client console. Run with steam.exe -console, then:<br />
@@ -185,3 +343,522 @@ client console. Run with steam.exe -console, then:<br />
     <li>achievement_clear &lt;appid&gt; &lt;achievement name&gt;<br /></li>
     <li>reset_all_stats &lt;appid&gt;</li>
 </ul>
+<h2 class="bb_subsection"><a name="19"></a>Previewing and Publishing</h2>
+Changes you make in the achievements editor are saved to your app's draft configuration. To make
+them live, publish your changes from the <strong>Publish</strong> tab in
+<strong>Edit Steamworks Settings</strong>, as with any other Steamworks setting.<br />
+<br />
+Before release, you can preview your achievements on your own Steam achievements page, linked from
+the top of the editor. Use developer-only sets to test new achievements without showing them to
+players.<br />
+<br />
+To fully enable achievements and complete your release checklist, you also need to check the
+<strong>Steam Achievements</strong> option under <strong>Supported Features</strong> in your store
+page's basic info. To pass the release checklist, every achievement must have a name in each of the
+languages you've configured, and must have an icon.
+<h2 class="bb_section"><a name="20"></a>Achievement Sets</h2>
+Achievement Sets let you organize your game's achievements into named groups, track player
+completion per set, and add or retire achievements over time without taking away a player's
+completion. With Achievement Sets, you can:<br />
+<ul>
+    <li>
+        Group achievements in ways that make sense for your game, such as by mode, character,
+        chapter, or event.<br />
+    </li>
+    <li>
+        Add achievements for DLC that only count toward completion for players who own that DLC.<br />
+    </li>
+    <li>
+        Archive achievements and sets for content that has been retired, without removing them from
+        players who earned them.<br />
+    </li>
+    <li>Build and test achievements in developer-only sets that are hidden from players.<br /></li>
+    <li>
+        Manage achievement definitions, set assignments, icons, and localization in bulk using CSV
+        and image files.
+    </li>
+</ul>
+<h2 class="bb_subsection"><a name="21"></a>Base Game Set</h2>
+Every game has a <strong>Base game achievements</strong> set. Achievements that aren't assigned to
+another set belong to the base game set, so if you don't create any additional sets, all of your
+achievements are in the base game set. For most games, this set will contain most of your
+achievements.<br />
+<br />
+The base game set can't be renamed, deleted, or reordered. It is always shown first, unless it is
+empty--in which case it won't be displayed (but will still count against the limit).
+<h2 class="bb_subsection"><a name="22"></a>Custom Sets</h2>
+You can create additional sets to organize your achievements. Each set has a name, which is shown to
+players, and an optional restriction:<br />
+<br />
+<table>
+    <tbody>
+        <tr>
+            <th>Restriction</th>
+            <th>Who can earn achievements in the set</th>
+        </tr>
+        <tr>
+            <td><strong>All players of the game</strong></td>
+            <td>Anyone who can play the game.</td>
+        </tr>
+        <tr>
+            <td><strong>Owners of</strong> <i>(DLC)</i></td>
+            <td>Only players who can play the selected DLC.</td>
+        </tr>
+    </tbody>
+</table>
+<br />
+Players see progress for each set, and completing a set is tracked separately from completing the
+rest of the game.
+<h2 class="bb_subsection"><a name="23"></a>DLC Sets</h2>
+A set restricted to owners of a DLC is a <strong>DLC set</strong>. DLC sets:<br />
+<ul>
+    <li>
+        Can be explored by all players on the game's achievements page, but only players who can
+        play the DLC can earn them.<br />
+    </li>
+    <li>Do not count toward completion of the base game or any other set.<br /></li>
+    <li>
+        Stay hidden from players until the DLC is released. This lets you configure and test
+        achievements for upcoming DLC ahead of launch.<br />
+    </li>
+    <li>
+        Use the DLC's store artwork and store link on the achievements page. If the DLC doesn't have
+        a published store page, the base game's artwork and store link are used instead, and the
+        editor will warn you about this.<br />
+    </li>
+    <li>Are shown in an achievements panel on the DLC's store page.</li>
+</ul>
+<br />
+The set name will be displayed with a "DLC" prefix, so you don't need to include "DLC" in the name
+yourself.
+<h2 class="bb_subsection"><a name="24"></a>Developer-only Sets</h2>
+A set marked as <strong>Developer-only</strong> is only visible to developers of the app, whether or
+not the app has been released. Only developers can unlock achievements in a developer-only set.
+Developer-only sets are useful for building and testing new achievements before they're ready to
+ship.
+<h2 class="bb_subsection"><a name="25"></a>Archiving</h2>
+Sometimes a game mode is replaced, a seasonal event ends, or an achievement can no longer be earned.
+Instead of deleting achievements that players have earned, you can archive them.<br />
+<ul>
+    <li>
+        <strong>Archived achievements</strong> remain visible to players who unlocked them, and can
+        still be featured on their profiles. Players who haven't unlocked an archived achievement
+        won't see it, and it won't count against their completion of the set it belongs to.<br />
+    </li>
+    <li>
+        <strong>Archived sets</strong> are only visible to players who previously unlocked an
+        achievement in them. No achievements in an archived set can be unlocked. Players who have
+        unlocked achievements in an archived set can still see all of the set's achievements.
+    </li>
+</ul>
+<br />
+Archiving doesn't change your game. When you archive an achievement, make sure your game no longer
+awards it.
+<h2 class="bb_subsection"><a name="26"></a>Spoiler Achievements</h2>
+Achievements previously marked as <strong>Hidden</strong> are now called
+<strong>Spoiler</strong> achievements. To avoid spoiling your game, a spoiler achievement's name and
+description aren't shown to players until they unlock it or choose to reveal it. Spoiler and
+archived achievements aren't shown in the achievements panel on your store page.
+<h2 class="bb_subsection"><a name="27"></a>Completion</h2>
+Completion is tracked per set:<br />
+<ul>
+    <li>
+        A player completes a set by unlocking every achievement in it that is still available.
+        Archived achievements that the player hasn't unlocked aren't required.<br />
+    </li>
+    <li>
+        <strong>Once a player completes a set, it stays completed</strong>, even if you add
+        achievements to that set later.<br />
+    </li>
+    <li>DLC sets only count toward a player's completion if they own the DLC.</li>
+</ul>
+<br />
+Players can show off how many games and sets they have completed on their Steam profile. A game
+qualifies for the Completionist Showcase on their profile when the player has completed any of the
+game's sets.
+<h2 class="bb_subsection"><a name="28"></a>Creating a Set</h2>
+<ol>
+    <li>
+        On the <strong>Manage Achievements</strong> tab, click
+        <strong>Create New Set</strong>.<br />
+    </li>
+    <li>Enter a <strong>Set name</strong>. The name is shown to players.<br /></li>
+    <li>
+        Under <strong>Restrictions</strong>, choose <strong>All players of the game</strong>, or
+        select a DLC to restrict the set to owners of that DLC. The DLC list includes the DLC listed
+        for your game, along with their app IDs.<br />
+    </li>
+    <li>Optionally, mark the set as <strong>Developer-only</strong>.<br /></li>
+    <li>Save the set.</li>
+</ol>
+<br />
+A set with no achievements in it will not appear to anyone.
+<h2 class="bb_subsection"><a name="29"></a>Editing a Set</h2>
+Open the set's menu and choose <strong>Edit set</strong> to change its name, restrictions,
+developer-only status, or to mark it as <strong>Archived</strong>.<br />
+<br />
+Each set shows its <strong>Visibility</strong> in the editor:<br />
+<br />
+<table>
+    <tbody>
+        <tr>
+            <th>Visibility</th>
+            <th>Meaning</th>
+        </tr>
+        <tr>
+            <td><strong>Visible</strong></td>
+            <td>Players can see this set.</td>
+        </tr>
+        <tr>
+            <td><strong>Hidden by restrictions</strong></td>
+            <td>
+                Players can't see this set yet, for example because it's developer-only or its DLC
+                hasn't been released.
+            </td>
+        </tr>
+        <tr>
+            <td><strong>Will be visible upon publish</strong></td>
+            <td>Players will be able to see this set once you publish your changes.</td>
+        </tr>
+    </tbody>
+</table>
+<h2 class="bb_subsection"><a name="30"></a>Reordering Sets</h2>
+Click <strong>Reorder Sets</strong> in the toolbar, then drag and drop your sets to choose the order
+players will see them. The base game set can't be moved.
+<h2 class="bb_subsection"><a name="31"></a>Deleting a Set</h2>
+Open the set's menu and choose <strong>Delete set</strong>. You must move or delete all achievements
+in a set before you can delete it. If you want to retire a set without removing achievements from
+players who earned them, archive it instead.
+<h2 class="bb_subsection"><a name="32"></a>Moving Achievements Between Sets</h2>
+To move a single achievement, change its <strong>In Set</strong> field. To move many achievements at
+once, use <strong>Bulk Move</strong>:<br />
+<ol>
+    <li>Click <strong>Bulk Move</strong> in the achievements table header.<br /></li>
+    <li>
+        Check the achievements you want to move. The number of selected achievements is shown at the
+        bottom of the page.<br />
+    </li>
+    <li>
+        Choose a destination set, or choose <strong>Create New Set...</strong> to create one.<br />
+    </li>
+    <li>Click <strong>Move</strong>.</li>
+</ol>
+For example, you can turn on the Bulk Move mode, use the search box to filter achievements by api
+name, then click the checkbox in the column headers to select all visible achievements in a group to
+move. This workflow is relatively simple and can save quite a bit of time.<br />
+<br />
+The editor will warn you before a move that could affect players:<br />
+<ul>
+    <li>
+        Moving achievements from a visible set to a hidden or unreleased set will hide them from
+        players who have already unlocked them.<br />
+    </li>
+    <li>
+        Moving achievements into a set that players have progress in may break completion for those
+        players.
+    </li>
+</ul>
+<br />
+<strong>Note:</strong> Adding an achievement to a set that has already been released won't break
+completion for players, but it may not display naturally. Consider adding a new set instead.
+<h2 class="bb_section"><a name="33"></a>Bulk Import/Export</h2>
+The <strong>Bulk Import/Export</strong> tab lets you manage your achievements as files: export CSV
+files, edit them in a spreadsheet tool, and upload them back along with your icons.
+<h2 class="bb_subsection"><a name="34"></a>Workflow</h2>
+<ol>
+    <li>
+        Click <strong>Export Definitions (.csv)</strong>,
+        <strong>Export Localization (.csv)</strong>, and/or
+        <strong>Export Set Localization (.csv)</strong> to download your current data.<br />
+    </li>
+    <li>
+        Edit the files. Header rows include notes in parentheses describing each column, for example
+        <code class="bb_code bb_code_inline nohighlight">spoiler (true or false)</code>. These notes
+        are ignored when you upload the file.<br />
+    </li>
+    <li>
+        Drag your <code class="bb_code bb_code_inline nohighlight">.csv</code> and
+        <code class="bb_code bb_code_inline nohighlight">.png</code> files onto the upload box, or
+        click <strong>Select Files...</strong>. You can upload multiple files at once.<br />
+    </li>
+    <li>
+        Review the <strong>Uploaded Files</strong> list for any errors. Removing a file undoes
+        everything it contributed. To replace a file, correct it and upload it again.<br />
+    </li>
+    <li>
+        Review the <strong>Pending Changes</strong>. Nothing is saved until you click
+        <strong>Save imported data</strong>.
+    </li>
+</ol>
+<br />
+If your game doesn't have any achievements yet, the definitions and localization exports are
+templates containing a couple of example rows beginning with
+<code class="bb_code bb_code_inline nohighlight">EXAMPLE_</code>. You can type over them, delete
+them, or upload the template as-is to see how importing works.
+<h2 class="bb_subsection"><a name="35"></a>Achievement Definitions CSV</h2>
+Exported as
+<code class="bb_code bb_code_inline nohighlight">&lt;appid&gt;-achievements-definitions.csv</code>.
+Each row defines one achievement.<br />
+<br />
+<table>
+    <tbody>
+        <tr>
+            <th>Column</th>
+            <th>Description</th>
+        </tr>
+        <tr>
+            <td><code class="bb_code bb_code_inline nohighlight">api_name</code></td>
+            <td>Required, unique. The name your game passes to the API.</td>
+        </tr>
+        <tr>
+            <td><code class="bb_code bb_code_inline nohighlight">setid</code></td>
+            <td>Optional. The ID of an existing set. Leave blank for the base game set.</td>
+        </tr>
+        <tr>
+            <td><code class="bb_code bb_code_inline nohighlight">permission</code></td>
+            <td>
+                One of <code class="bb_code bb_code_inline nohighlight">Client</code>,
+                <code class="bb_code bb_code_inline nohighlight">GameServer</code>, or
+                <code class="bb_code bb_code_inline nohighlight">OfficialGameServer</code>.
+            </td>
+        </tr>
+        <tr>
+            <td><code class="bb_code bb_code_inline nohighlight">spoiler</code></td>
+            <td>
+                <code class="bb_code bb_code_inline nohighlight">true</code> or
+                <code class="bb_code bb_code_inline nohighlight">false</code>.
+            </td>
+        </tr>
+        <tr>
+            <td><code class="bb_code bb_code_inline nohighlight">archived</code></td>
+            <td>
+                <code class="bb_code bb_code_inline nohighlight">true</code> or
+                <code class="bb_code bb_code_inline nohighlight">false</code>.
+            </td>
+        </tr>
+        <tr>
+            <td><code class="bb_code bb_code_inline nohighlight">progress_stat_name</code></td>
+            <td>
+                Optional. The name of an existing stat to use for a progress bar. Leave blank for no
+                progress bar.
+            </td>
+        </tr>
+        <tr>
+            <td><code class="bb_code bb_code_inline nohighlight">progress_stat_min</code></td>
+            <td>
+                A number, no lower than the stat's own minimum. Must be an integer if the stat is an
+                integer stat.
+            </td>
+        </tr>
+        <tr>
+            <td><code class="bb_code bb_code_inline nohighlight">progress_stat_max</code></td>
+            <td>
+                A number, greater than
+                <code class="bb_code bb_code_inline nohighlight">progress_stat_min</code> and no
+                higher than the stat's own maximum. Must be an integer if the stat is an integer
+                stat.
+            </td>
+        </tr>
+    </tbody>
+</table>
+<br />
+When you upload a definitions CSV, achievements are compared to your existing achievements by API
+name:<br />
+<ul>
+    <li>
+        <strong>To Add</strong> - Rows that don't match an existing API name are added as new
+        achievements. If you meant to rename an existing achievement's API name, change it in the
+        editor first or the old data will be removed.<br />
+    </li>
+    <li>
+        <strong>To Modify</strong> - Existing achievements whose values have changed are updated.<br />
+    </li>
+    <li>
+        <strong>Unmodified</strong> - Existing achievements whose values haven't changed are left
+        alone.<br />
+    </li>
+    <li>
+        <strong>Missing from CSV</strong> - Existing achievements that aren't in the file are kept,
+        unless you check <strong>Delete these achievements</strong>. Be thoughtful when removing
+        achievements because you can't simply add achievements back when they have been removed.
+    </li>
+</ul>
+<br />
+<strong>Note:</strong> Achievement names and descriptions aren't part of the definitions CSV. Use
+the localization CSV to set them.<br />
+<br />
+<strong>Note:</strong> A progress stat must already exist and must have the same permission as the
+achievement. To create new stats, edit your stats first.
+<h2 class="bb_subsection"><a name="36"></a>Achievement Localization CSV</h2>
+Exported as
+<code class="bb_code bb_code_inline nohighlight">&lt;appid&gt;-achievements-localization.csv</code>.
+Each achievement has two rows: one for its name and one for its description.<br />
+<br />
+<table>
+    <tbody>
+        <tr>
+            <th>Column</th>
+            <th>Description</th>
+        </tr>
+        <tr>
+            <td><code class="bb_code bb_code_inline nohighlight">api_name</code></td>
+            <td>
+                Required. Must match an
+                <code class="bb_code bb_code_inline nohighlight">api_name</code> from the
+                definitions CSV or an existing achievement. API names are case sensitive here.
+            </td>
+        </tr>
+        <tr>
+            <td><code class="bb_code bb_code_inline nohighlight">field</code></td>
+            <td>
+                <code class="bb_code bb_code_inline nohighlight">name</code> or
+                <code class="bb_code bb_code_inline nohighlight">description</code>.
+            </td>
+        </tr>
+        <tr>
+            <td><i>(one column per language)</i></td>
+            <td>
+                The text for that language, for example
+                <code class="bb_code bb_code_inline nohighlight">english</code>,
+                <code class="bb_code bb_code_inline nohighlight">french</code>,
+                <code class="bb_code bb_code_inline nohighlight">german</code>.
+            </td>
+        </tr>
+    </tbody>
+</table>
+<br />
+The language columns match the languages configured for your achievements. If you're starting on
+localization, configure your languages first so the exported CSV includes those language columns.<br />
+<br />
+If you upload a definitions CSV and a localization CSV together, localization for achievements that
+are missing from the definitions CSV won't be updated.
+<h2 class="bb_subsection"><a name="37"></a>Set Localization CSV</h2>
+Exported as
+<code class="bb_code bb_code_inline nohighlight"
+    >&lt;appid&gt;-achievement-sets-localization.csv</code
+>. Each row contains one set's name.<br />
+<br />
+<table>
+    <tbody>
+        <tr>
+            <th>Column</th>
+            <th>Description</th>
+        </tr>
+        <tr>
+            <td><code class="bb_code bb_code_inline nohighlight">setid</code></td>
+            <td>Required. The ID of an existing set.</td>
+        </tr>
+        <tr>
+            <td><i>(one column per language)</i></td>
+            <td>
+                The set name in that language.
+                <code class="bb_code bb_code_inline nohighlight">english</code> is required.
+            </td>
+        </tr>
+    </tbody>
+</table>
+<br />
+Sets must be created in the editor before you can localize them here. The base game set can't be
+renamed.
+<h2 class="bb_subsection"><a name="38"></a>Icon Files</h2>
+Name icon files with the achievement's API name followed by
+<code class="bb_code bb_code_inline nohighlight">_ACHIEVED</code> or
+<code class="bb_code bb_code_inline nohighlight">_UNACHIEVED</code>, for example
+<code class="bb_code bb_code_inline nohighlight">LEVEL_20_ACHIEVED.png</code> and
+<code class="bb_code bb_code_inline nohighlight">LEVEL_20_UNACHIEVED.png</code>. Icons are
+automatically assigned to the matching achievement.<br />
+<br />
+Check <strong>Automatically generate unachieved icons</strong> to create grayscale unachieved icons
+for any achieved icons you upload.<br />
+<br />
+If you upload a definitions CSV along with your icons, icons are only assigned to achievements
+included in that CSV. To upload icons on their own, upload them without a definitions CSV.
+<h2 class="bb_section"><a name="39"></a>What Players See</h2>
+<h2 class="bb_subsection"><a name="40"></a>Achievements Page</h2>
+Players see your achievements on the Steam achievements page, in the Steam Client and on the Steam
+Community website. The achievements page:<br />
+<ul>
+    <li>Shows progress and completion for each set, including DLC sets.<br /></li>
+    <li>Lets players compare their achievements with up to 3 friends.<br /></li>
+    <li>
+        Shows the global unlock rate for each achievement, and highlights rare achievements.<br />
+    </li>
+    <li>Lets players search achievements and filter them by unlock state or set.</li>
+</ul>
+<br />
+You can link players directly to your game's achievements:<br />
+<br />
+<table>
+    <tbody>
+        <tr>
+            <th>URL</th>
+            <th>Shows</th>
+        </tr>
+        <tr>
+            <td>
+                <code class="bb_code bb_code_inline nohighlight"
+                    >https://steamcommunity.com/achievements/&lt;appid&gt;</code
+                >
+            </td>
+            <td>
+                Your game's achievements, without a specific player's progress. Available whether or
+                not the player owns the game.
+            </td>
+        </tr>
+        <tr></tr>
+    </tbody>
+</table>
+<h2 class="bb_subsection"><a name="41"></a>Store Pages</h2>
+The achievements panel on your store page shows achievements from your game, excluding spoiler and
+archived achievements. DLC store pages show achievements from that DLC's set.
+<h2 class="bb_subsection"><a name="42"></a>Profiles</h2>
+Players can show off the number of games and sets they've completed in their profile's Achievement
+Showcase, and can feature games in the Completionist Showcase once they've completed any of the
+game's sets.
+<h2 class="bb_section"><a name="43"></a>Best Practices</h2>
+<ul>
+    <li>
+        <strong>Add new sets for new content.</strong> Adding achievements to a set that players
+        have already completed may appear confusing for players, as the set will be marked completed
+        but will have locked achievements. Creating a new set for new content, such as a DLC, an
+        update, or a new mode, keeps progress clear for players.<br />
+    </li>
+    <li>
+        <strong>Archive instead of deleting.</strong> If players have earned an achievement, archive
+        it rather than deleting it, so players keep what they earned.<br />
+    </li>
+    <li>
+        <strong>Use DLC sets for DLC achievements.</strong> This keeps the base game's completion
+        separate, so players who don't own the DLC aren't blocked from completing your game.<br />
+    </li>
+    <li>
+        <strong>Keep set names short and descriptive.</strong> Set names are shown to players in
+        many places, including in the Steam Client.<br />
+    </li>
+    <li>
+        <strong>Localize set names</strong> for each language your game supports, using the set
+        localization CSV or the editor.<br />
+    </li>
+    <li>
+        <strong>Test with developer-only sets</strong> before releasing new achievements to players.
+    </li>
+</ul>
+<h2 class="bb_section"><a name="44"></a>Frequently Asked Questions</h2>
+<h4>Do I need to update my game or the Steamworks SDK to use Achievement Sets?</h4>
+No. Sets are configured in Steamworks, and your game unlocks achievements using the same API names
+and calls as before.
+<h4>What happens to my existing achievements?</h4>
+They're all in the base game set. If you don't create any other sets, players will see your
+achievements as a single list on the new achievements page.
+<h4>Will players lose completion if I add new achievements?</h4>
+Players who have already completed a set keep that completion. However, adding achievements to a
+released set means players who hadn't finished it yet have more to do, so we recommend adding new
+sets for new content.
+<h4>What's the difference between archiving and deleting an achievement?</h4>
+Archived achievements stay visible to players who unlocked them, and no longer count against
+completion for players who didn't. Deleted achievements are removed for everyone.
+<h4>Can I move an achievement to a different set after it's released?</h4>
+Yes, but the editor will warn you if the move could hide the achievement from players who earned it,
+or affect players' completion.
+<h4>How many sets can I create?</h4>
+Up to 40, including the base game set.<br />
