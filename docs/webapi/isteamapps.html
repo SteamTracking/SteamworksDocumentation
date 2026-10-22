@@ -172,6 +172,27 @@ Version 2 will output the app name.<br />
             <td>✔</td>
             <td>AppID of game</td>
         </tr>
+        <tr>
+            <td><strong>starttime</strong></td>
+            <td>uint32</td>
+            <td></td>
+            <td>Start time, set as a Unix timestamp</td>
+        </tr>
+        <tr>
+            <td><strong>endtime</strong></td>
+            <td>uint32</td>
+            <td></td>
+            <td>End time, set as a Unix timestamp</td>
+        </tr>
+        <tr>
+            <td><strong>continue_token</strong></td>
+            <td>string</td>
+            <td></td>
+            <td>
+                Pagination token from the previous response. Only used when starttime and endtime
+                are used
+            </td>
+        </tr>
     </tbody>
 </table>
 <br />

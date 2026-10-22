@@ -380,6 +380,11 @@ Each entry in <code class="bb_code bb_code_inline nohighlight">reviews</code>:<b
             <td>bool</td>
             <td>True if the author was refunded for the app.</td>
         </tr>
+        <tr>
+            <td><strong>hardware</strong></td>
+            <td>{message}</td>
+            <td>The hardware the author chose to show on the review, if any. See below.</td>
+        </tr>
     </tbody>
 </table>
 <br />
@@ -425,6 +430,43 @@ The <code class="bb_code bb_code_inline nohighlight">author</code> of each revie
             <td><strong>last_played</strong></td>
             <td>uint32</td>
             <td>Unix timestamp when the author last played the app.</td>
+        </tr>
+    </tbody>
+</table>
+<br />
+The <code class="bb_code bb_code_inline nohighlight">hardware</code> of each review, as reported by
+the author's Steam client:<br />
+<table>
+    <tbody>
+        <tr>
+            <th>Name</th>
+            <th>Type</th>
+            <th>Description</th>
+        </tr>
+        <tr>
+            <td><strong>os</strong></td>
+            <td>string</td>
+            <td>Operating system.</td>
+        </tr>
+        <tr>
+            <td><strong>cpu_name</strong></td>
+            <td>string</td>
+            <td>CPU.</td>
+        </tr>
+        <tr>
+            <td><strong>adapter_description</strong></td>
+            <td>string</td>
+            <td>GPU.</td>
+        </tr>
+        <tr>
+            <td><strong>system_ram</strong></td>
+            <td>uint64</td>
+            <td>System RAM, in MB.</td>
+        </tr>
+        <tr>
+            <td><strong>vram_size</strong></td>
+            <td>uint32</td>
+            <td>Video RAM, in MB.</td>
         </tr>
     </tbody>
 </table>
@@ -474,6 +516,10 @@ is deprecated. GetAppReviews takes the same filters, with these differences:<br 
     <li>
         Each review has a new
         <code class="bb_code bb_code_inline nohighlight">refunded</code> field.<br />
+    </li>
+    <li>
+        <code class="bb_code bb_code_inline nohighlight">hardware</code> has the same fields, but
+        its strings are no longer profanity-filtered.<br />
     </li>
     <li>
         <code class="bb_code bb_code_inline nohighlight">total_matching</code> and
