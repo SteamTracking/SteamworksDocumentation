@@ -1020,8 +1020,9 @@ controller's motion data is returned.<br />
 <div class="bb_code cpp">uint16 GetSessionInputConfigurationSettings();</div>
 Get a bitmask of the Steam Input Configuration types opted in for the current session.<br />
 <br />
-<strong>Note:</strong> The user can override the settings from the Steamworks Partner site, so the
-returned values may not exactly match your default configuration.<br />
+<strong>Note:</strong> End users can override the default Steam Input settings that you set on the
+Steamworks Partner site, so returned values may not exactly match your default configuration. Steam
+Input is also forcibly enabled for any Steam Remote Play sessions.<br />
 <br />
 <strong>Returns:</strong> <a href="/doc/api/steam_api#uint16">uint16</a><br />
 A bitmask of
