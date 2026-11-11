@@ -547,6 +547,7 @@
     "store/application/packages/deluxe",
     "store/application/platforms",
     "store/application/platforms/linux",
+    "store/application/platforms/linux/proton",
     "store/application/soundtrackapp",
     "store/assets",
     "store/assets/community",
